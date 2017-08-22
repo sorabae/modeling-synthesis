@@ -1,0 +1,11 @@
+./helpers/helper.txt:15:+ "public class RobotiumUtil {" + "\n"
+./helpers/helper.txt:20:+ "	private RobotiumUtil(Solo solo) {" + "\n"
+./helpers/helper.txt:84:+ "			solo.Log2file(\"RobotiumUtil\", \"ActionBar does not have MenuView\");" + "\n"
+./helpers/helper.txt:280:+ "	public static RobotiumUtil v(Solo solo) {" + "\n"
+./helpers/helper.txt:282:+ "			instance = new RobotiumUtil(solo);" + "\n"
+./helpers/helper.txt:287:+ "	private static RobotiumUtil instance;" + "\n"
+./Robo.java:2: * Robo.java - part of the GATOR project
+./Robo.java:29:public class Robo {
+./Robo.java:60:  public Robo(String packName) {
+./Robo.java:171:   * Use existing Robotium code to synthesize program
+./Robo.java:485:      return "RoboTestCase[" + path + "]";
