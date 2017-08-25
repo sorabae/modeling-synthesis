@@ -90,7 +90,14 @@ public class HTMLDemoClient implements GUIAnalysisClient {
     "\t\t\t</div>\n" +
     "\t\t\t<div class='row graph'>\n" +
     "\t\t\t\t<div class='col-lg-6'>\n" +
-    "\t\t\t\t\t<h4>Window Transition Graph</h4>\n" +
+    "\t\t\t\t\t<div class='row'>\n" +
+    "\t\t\t\t\t\t<div class='col-lg-6'>\n" +
+    "\t\t\t\t\t\t\t<h4>WTG</h4>\n" +
+    "\t\t\t\t\t\t</div>\n" +
+    "\t\t\t\t\t\t<div class='col-lg-6'>\n" +
+    "\t\t\t\t\t\t\t<button type='button' class='btn btn-primary synthesis' id='synthesis-all'>Synthesize</button>\n" +
+    "\t\t\t\t\t\t</div>\n" +
+    "\t\t\t\t\t</div>\n" +
     "\t\t\t\t\t<div id='cy'></div>\n" +
     "\t\t\t\t</div>\n" +
     "\t\t\t\t<div class='col-lg-6'>\n" +
@@ -99,7 +106,7 @@ public class HTMLDemoClient implements GUIAnalysisClient {
     "\t\t\t\t\t\t\t<h4>Selected Subgraph</h4>\n" +
     "\t\t\t\t\t\t</div>\n" +
     "\t\t\t\t\t\t<div class='col-lg-6'>\n" +
-    "\t\t\t\t\t\t\t<button type='button' class='btn btn-primary' id='synthesis'>Synthesize Program</button>\n" +
+    "\t\t\t\t\t\t\t<button type='button' class='btn btn-primary synthesis' id='synthesis-part'>Synthesize</button>\n" +
     "\t\t\t\t\t\t</div>\n" +
     "\t\t\t\t\t</div>\n" +
     "\t\t\t\t\t<div id='cy_part'></div>\n" +

@@ -116,10 +116,14 @@ $(function () {
   });
 
   var socket = io.connect('http://127.0.0.1:8000');
-  $("#synthesis").click(function () {
-    var convertData = function (x, i) { return x.data(); };
+  var convertData = function (x, i) { return x.data(); };
+  $("#synthesis-part").click(function () {
     socket.emit('Program Synthesis', { nodes: cy_part.nodes().map(convertData), edges: cy_part.edges().map(convertData) });
   });
 
+  // TODO: How to synthesize the entire graph?
+  $("#synthesis-all").click(function () {
+    socket.emit('Program Synthesis', { nodes: cy.nodes().map(convertData), edges: cy.edges().map(convertData) });
+  });
 
 });

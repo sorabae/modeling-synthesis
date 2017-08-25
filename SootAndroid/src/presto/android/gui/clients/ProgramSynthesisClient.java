@@ -23,7 +23,7 @@ import presto.android.gui.wtg.flowgraph.NLauncherNode;
 import soot.SootMethod;
 
 import java.util.*;
-
+import java.util.stream.Collectors;
 import java.io.*;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
@@ -67,9 +67,7 @@ public class ProgramSynthesisClient implements GUIAnalysisClient {
   }
 
   public void synthesis(WTG wtg, JSONObject json) {
-    JSONArray nodes = (JSONArray) json.get("nodes");
     JSONArray edges = (JSONArray) json.get("edges");
-
     if (edges.isEmpty()) return;
 
     // find out the source node among given nodes
@@ -85,9 +83,9 @@ public class ProgramSynthesisClient implements GUIAnalysisClient {
     assert(source != null);
 
     // group edges together if they have the same target node
-    HashMap<Integer, List<WTGEdge>> group = new HashMap();
+    HashMap<WTGNode, List<WTGEdge>> group = new HashMap();
     for (WTGEdge edge : source.getOutEdges()) {
-      int key = edge.getTargetNode().getId();
+      WTGNode key = edge.getTargetNode();
       List<WTGEdge> value = group.get(key);
       if (value == null) {
         value = new ArrayList();
@@ -95,6 +93,17 @@ public class ProgramSynthesisClient implements GUIAnalysisClient {
       value.add(edge);
       group.put(key, value);
     }
+
+    // collect windows
+    List<WTGNode> nodes = new ArrayList(group.keySet());
+    if (!nodes.contains(source)) {
+      nodes.add(source);
+    }
+    List<SootClass> windows = nodes.stream().map(node -> node.getWindow().getClassType()).collect(Collectors.toList());
+
+    // collect method names
+    List<String> methodNames = new ArrayList();
+    methodNames.add(source.getWindow().getClassType().getShortName());
 
     // set up test generation template parameters
     Velocity.init();
@@ -110,26 +119,20 @@ public class ProgramSynthesisClient implements GUIAnalysisClient {
     context.put("activity_whole_path", mainActivityClass.getPackageName() + "." + mainActivityClass.getShortName());
 
     // start generating test cases
-    // Robo robo = new Robo(guiOutput.getAppPackageName());
     RoboSynthesizer robo = new RoboSynthesizer(guiOutput.getAppPackageName());
-    robo.synthesizeProgram(group);
-    // for (WTGEdge edge : source.getOutEdges()) {
-    //   List<WTGEdge> path = new ArrayList<WTGEdge>();
-    //   path.add(edge);
-    //   robo.generateTestCase(new Path(path));
-    // }
+    robo.synthesizeProgram(group, windows);
 
     // generate test case file
-    genCaseFile(context, "SynthesizedProgram", "Path", robo);
+    genCaseFile(context, "SynthesizedProgram", methodNames, robo);
   }
 
   /**
    * Generate test case file in Android JUnit format.
    */
-  private void genCaseFile(VelocityContext context, String className, String methodName,
+  private void genCaseFile(VelocityContext context, String className, List<String> methodNames,
                            RoboSynthesizer robo) {
     context.put("classname", className);
-    context.put("methodname", methodName);
+    context.put("methodnames", methodNames);
     context.put("test_list", robo.casesAsStrings());
     context.put("import_list", robo.imports);
     context.put("helper_list", robo.helpers);

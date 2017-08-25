@@ -7,12 +7,14 @@ import presto.android.Configs;
 import presto.android.Logger;
 import presto.android.gui.graph.NObjectNode;
 import presto.android.gui.wtg.ds.WTGEdge;
+import presto.android.gui.wtg.ds.WTGNode;
 import presto.android.gui.wtg.flowgraph.NLauncherNode;
 import soot.SootClass;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 import soot.SootMethod;
 import presto.android.gui.wtg.EventHandler;
 
@@ -164,11 +166,14 @@ public class RoboSynthesizer {
    * Use existing Robotium code to synthesize program
    * representing event modeling
    */
-  public TestCase synthesizeProgram(HashMap<Integer, List<WTGEdge>> group) {
+  public TestCase synthesizeProgram(HashMap<WTGNode, List<WTGEdge>> group, List<SootClass> windows) {
     TestCase newTestCase = newTestCase();
+
+    HelperDepot.addWindowObjects(newTestCase, windows);
 
     Iterator<List<WTGEdge>> it = group.values().iterator();
     List<WTGEdge> first = it.next();
+
     if (!it.hasNext()) {
       synthesizeBranch(newTestCase, first);
     } else {
@@ -208,7 +213,7 @@ public class RoboSynthesizer {
       testCase.append("\t\t}");
     } else {
       synthesizeBody(testCase, edges);
-      testCase.append("\t\t" + tmp.getTargetNode().getWindow().getClassType() + "();");
+      testCase.append("\t\tm_" + tmp.getTargetNode().getWindow().getClassType().getShortName() + "();");
     }
   }
 
@@ -216,16 +221,17 @@ public class RoboSynthesizer {
     Iterator<WTGEdge> it = edges.iterator();
     WTGEdge first = it.next();
     if (!it.hasNext()) {
-      synthesizeEdge(testCase, first);
-      genForEdge(testCase, first);
+      synthesizeEdge(testCase, first, "\t\t\t");
+      // genForEdge(testCase, first);
     } else {
+      String indent = "\t\t\t\t\t";
       int i = 0;
       // TODO: import java.util.Random
       testCase.append("\t\t\tRandom random_body = new Random();");
       testCase.append("\t\t\tswitch (random_body.nextInt(100)) {");
       testCase.append("\t\t\t\tcase " + i + " : ");
-      synthesizeEdge(testCase, first);
-      genForEdge(testCase, first);
+      synthesizeEdge(testCase, first, indent);
+      // genForEdge(testCase, first);
       testCase.append("\t\t\t\t\tbreak;");
       i++;
 
@@ -233,13 +239,13 @@ public class RoboSynthesizer {
         WTGEdge next = it.next();
         if (!it.hasNext()) {
           testCase.append("\t\t\t\tdeafult : ");
-          synthesizeEdge(testCase, next);
-          genForEdge(testCase, next);
+          synthesizeEdge(testCase, next, indent);
+          // genForEdge(testCase, next);
           break;
         } else {
           testCase.append("\t\t\t\tcase " + i + " : ");
-          synthesizeEdge(testCase, next);
-          genForEdge(testCase, next);
+          synthesizeEdge(testCase, next, indent);
+          // genForEdge(testCase, next);
           testCase.append("\t\t\t\t\tbreak;");
           i++;
         }
@@ -249,20 +255,21 @@ public class RoboSynthesizer {
   }
 
   /*
-   * TODO:
-   * - Determine event modeling format
-   * - How to analyzers handle callbacks - lifecycles and event handlers
-   *   - call graph format (in the ICSE'15 paper)
-   *   - event loop (but for web applications)
-   *   - create a sequence of callbacks and call them during the analysis 
+   * - Determine a event modeling format
+   *   - In order to consider an activity that requires its previous context,
+   *     we generate an activity once
+   *   - For a life cycle callback,
+   *     explicitly call the callback on the corresponding activity
+   *     (TODO: what if data is passed to the activity by Intent?)
+   *   - TODO: For a event handler callback
    */
-  public void synthesizeEdge(TestCase testCase, WTGEdge edge) {
+  public void synthesizeEdge(TestCase testCase, WTGEdge edge, String indent) {
     Set<SootMethod> handlers = edge.getEventHandlers();
     if (handlers.isEmpty()) {
       System.out.println("* no event handler");
     } else {
       for (SootMethod handler : handlers) {
-        System.out.println(handler);
+        System.out.println(handler.getSignature());
       }
     }
 
@@ -271,7 +278,16 @@ public class RoboSynthesizer {
       System.out.println("* no callbacks");
     } else {
       for (EventHandler callback : callbacks) {
-        System.out.println(callback.getEventHandler());
+        SootMethod method = callback.getEventHandler();
+        String cls = method.getDeclaringClass().getShortName();
+        String obj = "Windows.w_" + cls;
+
+        String mth = method.getName();
+        String arg = "";
+        if (mth.equals("onCreate")) {
+          arg = "null";
+        }
+        testCase.append(indent + obj + "." + mth + "(" + arg + ");");
       }
     }
   }

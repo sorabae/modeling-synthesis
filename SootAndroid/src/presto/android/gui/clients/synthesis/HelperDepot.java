@@ -12,7 +12,7 @@ import soot.Scene;
 import soot.SootClass;
 import soot.SootMethod;
 
-import java.util.Set;
+import java.util.*;
 
 /**
  * Helpers' code warehouse.
@@ -27,39 +27,39 @@ public class HelperDepot {
       + " * This file is automatically created by Gator.\n"
       + " *\n"
       + " */\n\n"
-      + "package ${package}.tests;\n\n"
-      + "import android.test.ActivityInstrumentationTestCase2;\n"
-      + "import android.util.Log;\n"
-      + "import com.robotium.solo.Solo;\n"
+      + "package ${package};\n\n"
+      // + "import android.test.ActivityInstrumentationTestCase2;\n"
+      // + "import android.util.Log;\n"
+      // + "import com.robotium.solo.Solo;\n"
       + "#foreach( ${import} in ${import_list} )\n"
       + "import ${import};\n"
       + "#end\n"
       + "import ${activity_whole_path};\n\n"
-      + "public class $classname extends ActivityInstrumentationTestCase2<${activity}> {\n\n"
-      + "  private Solo solo;\n"
-      + "  private final static String TAG = \"Gator.TestGenClient\";\n\n"
+      + "public class $classname {\n"// extends ActivityInstrumentationTestCase2<${activity}> {\n\n"
+      // + "  private Solo solo;\n"
+      // + "  private final static String TAG = \"Gator.TestGenClient\";\n\n"
       + "#foreach( ${global} in ${global_list} )\n"
       + "  private final ${global};\n"
       + "#end\n\n"
       + "  public $classname() {\n"
-      + "    super(${init});\n"
+      // + "    super(${init});\n"
       + "  }\n\n"
-      + "  @Override\n"
-      + "  public void setUp() throws Exception {\n"
-      + "    solo = new Solo(getInstrumentation(), getActivity());\n"
-      + "    solo.unlockScreen();\n"
-      + "#foreach( ${setup} in ${setup_list} )"
-      + "    ${setup}\n"
-      + "#end"
-      + "  }\n\n"
-      + "  @Override\n"
-      + "  public void tearDown() throws Exception {\n"
-      + "    solo.finishOpenedActivities();\n"
-      + "  }\n\n\n"
-      + "#set( $count = 1 )\n"
+      // + "  @Override\n"
+      // + "  public void setUp() throws Exception {\n"
+      // + "    solo = new Solo(getInstrumentation(), getActivity());\n"
+      // + "    solo.unlockScreen();\n"
+      // + "#foreach( ${setup} in ${setup_list} )"
+      // + "    ${setup}\n"
+      // + "#end"
+      // + "  }\n\n"
+      // + "  @Override\n"
+      // + "  public void tearDown() throws Exception {\n"
+      // + "    solo.finishOpenedActivities();\n"
+      // + "  }\n\n\n"
+      + "#set( $count = 0 )\n"
       + "#set( $String = \"\")\n"
       + "#foreach( ${test} in ${test_list} )\n"
-      + "  public void test${methodname}$String.format(\"%03d\", ${count})() throws Exception {\n"
+      + "  public void m_${methodnames[$count]}() throws Exception {\n"
       + "${test}"
       + "  }\n\n"
       + "#set( $count = $count + 1 )\n"
@@ -74,6 +74,7 @@ public class HelperDepot {
       + "${helper_class}\n"
       + "#end"
       + "}\n";
+
   /**
    * Helper functions for ActionBar.
    */
@@ -421,6 +422,17 @@ public class HelperDepot {
 
   @SuppressWarnings("unused")
   private static int counter = 100;
+
+  public static void addWindowObjects(RoboSynthesizer.TestCase testCase, List<SootClass> windows) {
+    String window_class = "  static class Windows {\n";
+    for (SootClass window: windows) {
+      testCase.addImport(window.getName());
+      String name = window.getShortName();
+      window_class += "    public static final " + name + " w_" + name + " = new " + name + "();\n";
+    }
+    window_class += "  }\n";
+    testCase.addHelperClass(window_class);
+  }
 
   public static void addPaiSupport(RoboSynthesizer.TestCase testCase) {
     testCase.addHelperClass(f_pai_ase15);
