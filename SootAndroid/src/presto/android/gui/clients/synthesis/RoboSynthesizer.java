@@ -169,7 +169,10 @@ public class RoboSynthesizer {
   public TestCase synthesizeProgram(HashMap<WTGNode, List<WTGEdge>> group, List<SootClass> windows) {
     TestCase newTestCase = newTestCase();
 
-    HelperDepot.addWindowObjects(newTestCase, windows);
+    windows.forEach(window -> HelperDepot.addNecessaryObject(window));
+
+    // import java.util.Random
+    newTestCase.addImport("java.util.Random");
 
     Iterator<List<WTGEdge>> it = group.values().iterator();
     List<WTGEdge> first = it.next();
@@ -178,7 +181,6 @@ public class RoboSynthesizer {
       synthesizeBranch(newTestCase, first);
     } else {
       int i = 0;
-      // TODO: import java.util.Random
       newTestCase.append("Random random = new Random();");
       newTestCase.append("switch (random.nextInt(100)) {");
       newTestCase.append("\tcase " + i + " : ");
@@ -189,7 +191,7 @@ public class RoboSynthesizer {
       while (true) {
         List<WTGEdge> next = it.next();
         if (!it.hasNext()) {
-          newTestCase.append("\tdeafult : ");
+          newTestCase.append("\tdefult : ");
           synthesizeBranch(newTestCase, next);
           break;
         } else {
@@ -201,6 +203,9 @@ public class RoboSynthesizer {
       }
       newTestCase.append("}");
     }
+
+    HelperDepot.writeNecessaryObjects(newTestCase);
+
     return newTestCase;
   }
 
@@ -209,48 +214,46 @@ public class RoboSynthesizer {
     if (tmp.getTargetNode() == tmp.getSourceNode()) {
       testCase.append("\t\tRandom random_branch = new Random();");
       testCase.append("\t\twhile (random_branch.nextInt) {");
-      synthesizeBody(testCase, edges);
+      synthesizeBody(testCase, edges, "\t\t\t");
       testCase.append("\t\t}");
     } else {
-      synthesizeBody(testCase, edges);
+      synthesizeBody(testCase, edges, "\t\t");
       testCase.append("\t\tm_" + tmp.getTargetNode().getWindow().getClassType().getShortName() + "();");
     }
   }
 
-  public void synthesizeBody(TestCase testCase, List<WTGEdge> edges) {
+  public void synthesizeBody(TestCase testCase, List<WTGEdge> edges, String indent) {
     Iterator<WTGEdge> it = edges.iterator();
     WTGEdge first = it.next();
     if (!it.hasNext()) {
-      synthesizeEdge(testCase, first, "\t\t\t");
-      // genForEdge(testCase, first);
-    } else {
-      String indent = "\t\t\t\t\t";
-      int i = 0;
-      // TODO: import java.util.Random
-      testCase.append("\t\t\tRandom random_body = new Random();");
-      testCase.append("\t\t\tswitch (random_body.nextInt(100)) {");
-      testCase.append("\t\t\t\tcase " + i + " : ");
       synthesizeEdge(testCase, first, indent);
-      // genForEdge(testCase, first);
-      testCase.append("\t\t\t\t\tbreak;");
+      //genForEdge(testCase, first);
+    } else {
+      int i = 0;
+      testCase.append(indent + "Random random_body = new Random();");
+      testCase.append(indent + "switch (random_body.nextInt(100)) {");
+      testCase.append(indent + "\tcase " + i + " : ");
+      synthesizeEdge(testCase, first, indent + "\t\t");
+      //genForEdge(testCase, first);
+      testCase.append(indent + "\t\t" + "break;");
       i++;
 
       while (true) {
         WTGEdge next = it.next();
         if (!it.hasNext()) {
-          testCase.append("\t\t\t\tdeafult : ");
-          synthesizeEdge(testCase, next, indent);
-          // genForEdge(testCase, next);
+          testCase.append(indent + "\tdefult : ");
+          synthesizeEdge(testCase, next, indent + "\t\t");
+          //genForEdge(testCase, next);
           break;
         } else {
-          testCase.append("\t\t\t\tcase " + i + " : ");
-          synthesizeEdge(testCase, next, indent);
-          // genForEdge(testCase, next);
-          testCase.append("\t\t\t\t\tbreak;");
+          testCase.append(indent + "\tcase " + i + " : ");
+          synthesizeEdge(testCase, next, indent + "\t\t");
+          //genForEdge(testCase, next);
+          testCase.append(indent + "\t\tbreak;");
           i++;
         }
       }
-      testCase.append("\t\t\t}");
+      testCase.append(indent + "}");
     }
   }
 
@@ -261,15 +264,25 @@ public class RoboSynthesizer {
    *   - For a life cycle callback,
    *     explicitly call the callback on the corresponding activity
    *     (TODO: what if data is passed to the activity by Intent?)
-   *   - TODO: For a event handler callback
+   *   - TODO: For an event handler callback
+   *     dynamically generated callbacks such as onClick requires source-to-source translation before the analysis
    */
   public void synthesizeEdge(TestCase testCase, WTGEdge edge, String indent) {
+    testCase.append(indent + "// " + edge.getEventType());
     Set<SootMethod> handlers = edge.getEventHandlers();
     if (handlers.isEmpty()) {
       System.out.println("* no event handler");
     } else {
+      // TODO: How to synthesize an arugment (MenuItem) for a menu
       for (SootMethod handler : handlers) {
-        System.out.println(handler.getSignature());
+        HelperDepot.addNecessaryObject(handler.getDeclaringClass());
+        String cls = handler.getDeclaringClass().getShortName();
+        String obj = "Windows.w_" + cls;
+
+        String mth = handler.getName();
+        String arg = "new MenuItem()";
+
+        testCase.append(indent + obj + "." + mth + "(" + arg + ");");
       }
     }
 
@@ -279,6 +292,8 @@ public class RoboSynthesizer {
     } else {
       for (EventHandler callback : callbacks) {
         SootMethod method = callback.getEventHandler();
+
+        HelperDepot.addNecessaryObject(method.getDeclaringClass());
         String cls = method.getDeclaringClass().getShortName();
         String obj = "Windows.w_" + cls;
 

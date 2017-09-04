@@ -423,15 +423,20 @@ public class HelperDepot {
   @SuppressWarnings("unused")
   private static int counter = 100;
 
-  public static void addWindowObjects(RoboSynthesizer.TestCase testCase, List<SootClass> windows) {
-    String window_class = "  static class Windows {\n";
-    for (SootClass window: windows) {
-      testCase.addImport(window.getName());
-      String name = window.getShortName();
-      window_class += "    public static final " + name + " w_" + name + " = new " + name + "();\n";
+  private static List<SootClass> necessaryObjects = new ArrayList<SootClass>();
+  public static void addNecessaryObject(SootClass object) {
+    if (!necessaryObjects.contains(object))
+      necessaryObjects.add(object);
+  }
+  public static void writeNecessaryObjects(RoboSynthesizer.TestCase testCase) {
+    String helper = "  static class Necessary {\n";
+    for (SootClass object: necessaryObjects) {
+      testCase.addImport(object.getName());
+      String name = object.getShortName();
+      helper += "    public static final " + name + " w_" + name + " = new " + name + "();\n";
     }
-    window_class += "  }\n";
-    testCase.addHelperClass(window_class);
+    helper += "  }\n";
+    testCase.addHelperClass(helper);
   }
 
   public static void addPaiSupport(RoboSynthesizer.TestCase testCase) {

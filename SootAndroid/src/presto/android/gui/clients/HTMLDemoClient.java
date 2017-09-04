@@ -61,6 +61,7 @@ public class HTMLDemoClient implements GUIAnalysisClient {
     "<!DOCTYPE HTML>\n" +
     "<html>\n" +
     "\t<head>\n" +
+    "\t\t<title hidden>" + Configs.project + "</title>" +
     "\t\t<meta charset='UTF-8'>\n" +
     "\t\t<link rel='stylesheet' href='css/bootstrap.min.css' type='text/css'>\n" +
     "\t\t<link rel='stylesheet' href='css/style.css' type='text/css'>\n" +
