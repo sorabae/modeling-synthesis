@@ -9,15 +9,21 @@ import presto.android.gui.graph.NObjectNode;
 import presto.android.gui.wtg.ds.WTGEdge;
 import presto.android.gui.wtg.ds.WTGNode;
 import presto.android.gui.wtg.flowgraph.NLauncherNode;
-import soot.SootClass;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.stream.Collectors;
-import soot.SootMethod;
 import presto.android.gui.wtg.EventHandler;
 
+import soot.Local;
+import soot.SootClass;
+import soot.SootMethod;
+import soot.Unit;
+import soot.Value;
+import soot.jimple.AssignStmt;
+import soot.jimple.Stmt;
+import soot.jimple.StringConstant;
 /**
  * Main class.
  */
@@ -227,14 +233,14 @@ public class RoboSynthesizer {
     WTGEdge first = it.next();
     if (!it.hasNext()) {
       synthesizeEdge(testCase, first, indent);
-      //genForEdge(testCase, first);
+      genForEdge(testCase, first);
     } else {
       int i = 0;
       testCase.append(indent + "Random random_body = new Random();");
       testCase.append(indent + "switch (random_body.nextInt(100)) {");
       testCase.append(indent + "\tcase " + i + " : ");
       synthesizeEdge(testCase, first, indent + "\t\t");
-      //genForEdge(testCase, first);
+      genForEdge(testCase, first);
       testCase.append(indent + "\t\t" + "break;");
       i++;
 
@@ -243,12 +249,12 @@ public class RoboSynthesizer {
         if (!it.hasNext()) {
           testCase.append(indent + "\tdefult : ");
           synthesizeEdge(testCase, next, indent + "\t\t");
-          //genForEdge(testCase, next);
+          genForEdge(testCase, next);
           break;
         } else {
           testCase.append(indent + "\tcase " + i + " : ");
           synthesizeEdge(testCase, next, indent + "\t\t");
-          //genForEdge(testCase, next);
+          genForEdge(testCase, next);
           testCase.append(indent + "\t\tbreak;");
           i++;
         }
@@ -273,16 +279,33 @@ public class RoboSynthesizer {
     if (handlers.isEmpty()) {
       System.out.println("* no event handler");
     } else {
-      // TODO: How to synthesize an arugment (MenuItem) for a menu
+      String widget = edge.getGUIWidget().idNode.getIdName();
       for (SootMethod handler : handlers) {
+        String mth = null;
+        for (Iterator<Unit> stmts = handler.retrieveActiveBody().getUnits().iterator(); stmts.hasNext();) {
+          Stmt s = (Stmt) stmts.next();
+          if (!(s instanceof AssignStmt)) continue;
+          AssignStmt assign = (AssignStmt) s;
+          Local lhs = (Local) assign.getLeftOp();
+          Value rhs = assign.getRightOp();
+          if (rhs instanceof StringConstant) {
+            StringConstant constant = (StringConstant) rhs;
+            if (!constant.value.contains("$wrapper")) continue;
+            mth = constant.value;
+          }
+        }
+        // System.out.println(handler.getSignature());
+        // System.out.println(handler.getSuccessors());
+
         HelperDepot.addNecessaryObject(handler.getDeclaringClass());
         String cls = handler.getDeclaringClass().getShortName();
         String obj = "Windows.w_" + cls;
 
-        String mth = handler.getName();
-        String arg = "new MenuItem()";
+        if (mth == null)
+          mth = handler.getName();
+        String arg = "R.id." + widget;
 
-        testCase.append(indent + obj + "." + mth + "(" + arg + ");");
+        testCase.append(indent + obj + "." + mth + "(null, " + arg + ");");
       }
     }
 
