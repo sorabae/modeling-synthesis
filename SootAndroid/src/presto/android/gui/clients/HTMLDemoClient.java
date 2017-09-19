@@ -30,7 +30,7 @@ import java.util.Set;
 import java.io.*;
 
 public class HTMLDemoClient implements GUIAnalysisClient {
-  private String HTML_DIR = "/Users/sorabae/Research/gator-3.3/WTGDebugger";
+  private String HTML_DIR = "/home/cce13st/dev/modeling-synthesis/WTGDebugger";
 
   @Override
   public void run(GUIAnalysisOutput output) {

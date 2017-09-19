@@ -39,7 +39,7 @@ import presto.android.gui.clients.synthesis.RoboSynthesizer;
 import soot.SootClass;
 
 public class ProgramSynthesisClient implements GUIAnalysisClient {
-  private String HTML_DIR = "/Users/sorabae/Research/gator-3.3/WTGDebugger";
+  private String HTML_DIR = "/home/cce13st/dev/modeling-synthesis/WTGDebugger";
   private String SEP = File.separator;
   private GUIAnalysisOutput guiOutput;
 

@@ -270,7 +270,7 @@ def runGatorOnAPKDirect(apkFileName, GatorOptions, keepdecodedDir, output = None
 
 def main():
     configs = parseMainParam();
-    os.chdir("/Users/sorabae/Research/gator-3.3/AndroidBench")
+    os.chdir("/home/cce13st/dev/modeling-synthesis/AndroidBench")
     return runGatorOnAPKDirect(configs.APK_NAME,\
      configs.GATOR_OPTIONS,\
      configs.KEEP_DECODE, configs = configs)

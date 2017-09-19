@@ -1,0 +1,20 @@
+{
+	"BASE_DIR"		: "",
+	"BASE_PARAM"	: "",
+	"BASE_CLIENT"	: "HTMLDemoClient",
+	"BASE_CLIENT_PARAM"	: "",
+
+	"apv"	: {
+		"relative-path"	: "apv/pdfview",
+		"abs-path"	: "",
+		"api-level"	: "android-10",
+		"zip-file"	: "apv/apv-0.4.0.zip",
+		"abs-zip-file"	:	"",
+		"extra-lib"	: "",
+		"append-param" : "",
+		"append-client-param"	: "",
+		"override-client"	: "",
+		"override-param" : "",
+		"override-client-param"	: ""
+	}
+}
