@@ -5,6 +5,7 @@ fr/inria/gforge/spoon/bound/src/Main.class
 fr/inria/gforge/spoon/transformation/NotNullCheckAdderProcessor.class
 fr/inria/gforge/spoon/mutation/MutationTester.class
 fr/inria/gforge/spoon/analysis/ReferenceProcessor.class
+fr/inria/gforge/spoon/transformation/LifecycleRewriterProcessor.class
 fr/inria/gforge/spoon/analysis/EmptyMethodBodyProcessor.class
 fr/inria/gforge/spoon/mutation/MutationTester$1.class
 fr/inria/gforge/spoon/transformation/retry/RetryProcessor.class

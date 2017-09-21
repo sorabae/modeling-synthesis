@@ -281,6 +281,7 @@ public class RoboSynthesizer {
     } else {
       String widget = edge.getGUIWidget().idNode.getIdName();
       for (SootMethod handler : handlers) {
+        // find a wrapper
         String mth = null;
         for (Iterator<Unit> stmts = handler.retrieveActiveBody().getUnits().iterator(); stmts.hasNext();) {
           Stmt s = (Stmt) stmts.next();
@@ -294,18 +295,26 @@ public class RoboSynthesizer {
             mth = constant.value;
           }
         }
-        // System.out.println(handler.getSignature());
-        // System.out.println(handler.getSuccessors());
+        // if the wrapper does not exist, use the original method
+        if (mth == null) {
+          mth = handler.getName();
+        }
 
+        // find the class of the wrapper/method, so that we can call them explicitly
         HelperDepot.addNecessaryObject(handler.getDeclaringClass());
-        String cls = handler.getDeclaringClass().getShortName();
+        String cls = HelperDepot.trimInnerClass(handler.getDeclaringClass().getShortName());
         String obj = "Windows.w_" + cls;
 
-        if (mth == null)
-          mth = handler.getName();
-        String arg = "R.id." + widget;
+        // synthesize arguments
+        String arg;
+        boolean randomInArg = false;
+        switch (handler.getName()) {
+          case "onClick": arg = "null, R.id" + widget; break;
+          case "onItemClick": arg = "null, null, new Random().nextInt(100), null"; break;
+          default: arg = ""; break;
+        }
 
-        testCase.append(indent + obj + "." + mth + "(null, " + arg + ");");
+        testCase.append(indent + obj + "." + mth + "(" + arg + ");");
       }
     }
 
@@ -318,6 +327,10 @@ public class RoboSynthesizer {
 
         HelperDepot.addNecessaryObject(method.getDeclaringClass());
         String cls = method.getDeclaringClass().getShortName();
+        if (cls.contains("$")) {
+          String innerCls = cls.substring(cls.indexOf("$"));
+          cls = cls.substring(0, cls.indexOf("$")) + ".$instance_" + innerCls;
+        }
         String obj = "Windows.w_" + cls;
 
         String mth = method.getName();

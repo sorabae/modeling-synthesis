@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: fr.inria.gforge.spoon.analysis.EmptyMethodBodyProcessorTest
 -------------------------------------------------------------------------------
-Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.081 sec - in fr.inria.gforge.spoon.analysis.EmptyMethodBodyProcessorTest
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.134 sec - in fr.inria.gforge.spoon.analysis.EmptyMethodBodyProcessorTest

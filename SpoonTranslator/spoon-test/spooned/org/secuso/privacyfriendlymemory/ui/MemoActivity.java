@@ -199,10 +199,10 @@ public class MemoActivity extends org.secuso.privacyfriendlymemory.ui.MemoAppCom
     private void showWinDialog() {
         final android.app.Dialog dialog;
         if (memory.isMultiplayer()) {
-            dialog = new org.secuso.privacyfriendlymemory.ui.MemoActivity.DuoPlayerWinDialog(this, R.style.WinDialog, memory.getPlayers());
+            dialog = org.secuso.privacyfriendlymemory.ui.MemoActivity.$setInstance_DuoPlayerWinDialog(new org.secuso.privacyfriendlymemory.ui.MemoActivity.DuoPlayerWinDialog(this, R.style.WinDialog, memory.getPlayers()));
             dialog.getWindow().setContentView(R.layout.win_duo_screen_layout);
         }else {
-            dialog = new org.secuso.privacyfriendlymemory.ui.MemoActivity.SinglePlayerWinDialog(this, R.style.WinDialog, memory.getHighscore());
+            dialog = org.secuso.privacyfriendlymemory.ui.MemoActivity.$setInstance_SinglePlayerWinDialog(new org.secuso.privacyfriendlymemory.ui.MemoActivity.SinglePlayerWinDialog(this, R.style.WinDialog, memory.getHighscore()));
             dialog.getWindow().setContentView(R.layout.win_solo_screen_layout);
         }
         dialog.getWindow().setGravity(android.view.Gravity.CENTER_HORIZONTAL);
@@ -349,6 +349,20 @@ public class MemoActivity extends org.secuso.privacyfriendlymemory.ui.MemoAppCom
             
             return winnerName;
         }
+    }
+
+    static android.app.Dialog $instance_DuoPlayerWinDialog;
+
+    static android.app.Dialog $setInstance_DuoPlayerWinDialog(android.app.Dialog instance) {
+        $instance_DuoPlayerWinDialog = instance;
+        return instance;
+    }
+
+    static android.app.Dialog $instance_SinglePlayerWinDialog;
+
+    static android.app.Dialog $setInstance_SinglePlayerWinDialog(android.app.Dialog instance) {
+        $instance_SinglePlayerWinDialog = instance;
+        return instance;
     }
 }
 

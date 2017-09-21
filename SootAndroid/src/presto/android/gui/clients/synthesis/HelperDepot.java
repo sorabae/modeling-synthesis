@@ -13,6 +13,7 @@ import soot.SootClass;
 import soot.SootMethod;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Helpers' code warehouse.
@@ -430,13 +431,20 @@ public class HelperDepot {
   }
   public static void writeNecessaryObjects(RoboSynthesizer.TestCase testCase) {
     String helper = "  static class Necessary {\n";
-    for (SootClass object: necessaryObjects) {
-      testCase.addImport(object.getName());
-      String name = object.getShortName();
+    Set<String> objects = new HashSet<>(necessaryObjects.stream().map(obj -> trimInnerClass(obj.getName())).collect(Collectors.toList()));
+    for (String object: objects) {
+      testCase.addImport(object);
+      String name = object.substring(object.lastIndexOf('.') + 1);
       helper += "    public static final " + name + " w_" + name + " = new " + name + "();\n";
     }
     helper += "  }\n";
     testCase.addHelperClass(helper);
+  }
+
+  public static String trimInnerClass(String classname) {
+    int index = classname.indexOf('$');
+    if (index < 0) return classname;
+    return classname.substring(0, index);
   }
 
   public static void addPaiSupport(RoboSynthesizer.TestCase testCase) {
