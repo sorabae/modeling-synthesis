@@ -1,0 +1,7 @@
+# Mac
+.DS_Store
+
+# Spoon
+SpoonTranslator/spoon-examples/target/
+SpoonTranslator/spoon-test/bin/
+SpoonTranslator/spoon-test/spooned/
