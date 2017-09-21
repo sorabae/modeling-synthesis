@@ -279,7 +279,6 @@ public class RoboSynthesizer {
     if (handlers.isEmpty()) {
       System.out.println("* no event handler");
     } else {
-      String widget = edge.getGUIWidget().idNode.getIdName();
       for (SootMethod handler : handlers) {
         // find a wrapper
         String mth = null;
@@ -309,9 +308,17 @@ public class RoboSynthesizer {
         String arg;
         boolean randomInArg = false;
         switch (handler.getName()) {
-          case "onClick": arg = "null, R.id" + widget; break;
+          case "onClick":
+            String widget = edge.getGUIWidget().idNode.getIdName();
+            arg = "null, R.id" + widget;
+            break;
           case "onItemClick": arg = "null, null, new Random().nextInt(100), null"; break;
-          default: arg = ""; break;
+          // TODO: onCreateOptionsMenu should be included in the callbacks as well
+          case "onCreateOptionsMenu": continue;
+          default:
+            System.out.println("Not yet considered event handlers: " + handler.getName());
+            arg = "";
+            break;
         }
 
         testCase.append(indent + obj + "." + mth + "(" + arg + ");");
@@ -334,10 +341,17 @@ public class RoboSynthesizer {
         String obj = "Windows.w_" + cls;
 
         String mth = method.getName();
-        String arg = "";
-        if (mth.equals("onCreate")) {
-          arg = "null";
+        String arg;
+        switch (mth) {
+          case "onCreate": arg = null; break;
+          case "onCreateOptionsMenu":
+          // TODO:
+          // - What if different menus exist?
+          // - w_Menu should be added to the necessary objects
+          arg = "w_Menu"; break;
+          default: arg = ""; break;
         }
+
         testCase.append(indent + obj + "." + mth + "(" + arg + ");");
       }
     }
