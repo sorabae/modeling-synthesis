@@ -1,5 +1,6 @@
 package presto.android.gui.clients;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import presto.android.Configs;
 import presto.android.Debug;
@@ -28,6 +29,8 @@ import java.util.List;
 import java.util.Set;
 
 import java.io.*;
+
+import presto.android.gui.clients.synthesis.NodeInformation;
 
 public class HTMLDemoClient implements GUIAnalysisClient {
   private String HTML_DIR = "/home/cce13st/dev/modeling-synthesis/WTGDebugger";
@@ -113,10 +116,24 @@ public class HTMLDemoClient implements GUIAnalysisClient {
     "\t\t\t\t\t<div id='cy_part'></div>\n" +
     "\t\t\t\t</div>\n" +
     "\t\t\t</div>\n" +
-    "\t\t</div>\n" +
+    "\t\t</div>\n");
+
+    for (WTGNode node : wtg.getNodes()) {
+      NodeInformation info = new NodeInformation(node);
+      sb.append(
+        "\t\t<div>" +
+        "\t\t\t<p>" + info.getId() + "</p>\n" +
+        "\t\t\t<p>" + info.getType() + "</p>\n" +
+        "\t\t\t<p>" + info.getName() + "</p>\n" +
+        "\t\t</div>"
+      );
+    }
+
+    sb.append(
     "\t</body>\n" +
     "</html>\n"
     );
+
     return sb.toString();
   }
 

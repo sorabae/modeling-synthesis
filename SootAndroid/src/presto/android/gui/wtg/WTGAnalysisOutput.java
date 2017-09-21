@@ -22,6 +22,8 @@ import presto.android.gui.wtg.flowgraph.FlowgraphRebuilder;
 import presto.android.gui.wtg.flowgraph.NLauncherNode;
 import presto.android.gui.wtg.intent.IntentAnalysis;
 
+import presto.android.gui.listener.EventType;
+
 public class WTGAnalysisOutput {
   private WTG wtg;
   private GUIAnalysisOutput guiOutput;
@@ -74,6 +76,60 @@ public class WTGAnalysisOutput {
         List<WTGEdge> path = Lists.newArrayList(outEdge);
         paths.addAll(exploreInfeasiblePaths(path, k, allowLoop));
       }
+    }
+    return paths;
+  }
+  public List<List<WTGEdge>> exploreRealPaths(
+    WTGNode n, int k, boolean feasibilityCheck, boolean allowLoop) {
+    List<List<WTGEdge>> paths = Lists.newArrayList();
+    if (feasibilityCheck) {
+      for (WTGEdge outEdge : n.getOutEdges()) {
+        List<WTGEdge> path = Lists.newArrayList(outEdge);
+        WindowStack windowStack = new WindowStack(path);
+        paths.addAll(exploreRealFeasiblePaths(windowStack, k, allowLoop));
+      }
+    } else {
+      for (WTGEdge outEdge : n.getOutEdges()) {
+        List<WTGEdge> path = Lists.newArrayList(outEdge);
+        paths.addAll(exploreInfeasiblePaths(path, k, allowLoop));
+      }
+    }
+    return paths;
+  }
+
+  private List<List<WTGEdge>> exploreRealFeasiblePaths(WindowStack path, int length, boolean allowLoop) {
+    List<List<WTGEdge>> paths = Lists.newArrayList();
+    if (isLauncherToLauncher(path.getPath().get(0))) {
+      // don't allow the case where first edge is launcher to
+      // launcher
+      return paths;
+    } else if (path.getPath().size() == length) {
+      List<WTGEdge> copy = Lists.newArrayList(path.getPath());
+      paths.add(copy);
+      return paths;
+    } else if (path.getPath().size() > length) {
+      return paths;
+    }
+
+    for (WTGEdge outEdge : path.expandFeasibleEdge()) {
+      EventType type = outEdge.getEventType();
+      if (type == EventType.implicit_home_event ||
+          type == EventType.implicit_power_event ||
+          type == EventType.implicit_rotate_event) {
+        if (isReflexive(outEdge))
+          continue;
+      }
+
+      if (isLauncherToLauncher(outEdge)) {
+        // don't allow the case where the last edge is launcher to
+        // launcher
+        continue;
+      } else if (!allowLoop && path.getPath().contains(outEdge)) {
+        continue;
+      } 
+      WindowStack copy = path.copy();
+      copy.addEdge(outEdge);
+      paths.addAll(exploreRealFeasiblePaths(copy, length, allowLoop));
     }
     return paths;
   }
@@ -212,5 +268,9 @@ public class WTGAnalysisOutput {
   private boolean isLauncherToLauncher(WTGEdge edge) {
     return edge.getSourceNode() == edge.getTargetNode()
         && edge.getSourceNode().getWindow() instanceof NLauncherNode;
+  }
+
+  private boolean isReflexive(WTGEdge edge) {
+    return edge.getSourceNode() == edge.getTargetNode();
   }
 }

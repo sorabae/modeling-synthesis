@@ -167,7 +167,7 @@ public class ASE15Client implements GUIAnalysisClient {
                                                      VelocityContext context, int k) {
     Logger.verb(getClass().getSimpleName(), "-----lengthKFeasiblePathTestCases-----");
     WTG wtg = wtgOutput.getWTG();
-    List<List<WTGEdge>> smart = wtgOutput.explorePaths(wtg.getLauncherNode(), k, true, Configs.allowLoop);
+    List<List<WTGEdge>> smart = wtgOutput.exploreRealPaths(wtg.getLauncherNode(), k, true, Configs.allowLoop);
     Robo robo = new Robo(guiOutput.getAppPackageName());
     for (List<WTGEdge> path : smart) {
       robo.generateTestCase(new Path(path));

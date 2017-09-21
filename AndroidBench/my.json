@@ -1,7 +1,7 @@
 {
 	"BASE_DIR"		: "",
 	"BASE_PARAM"	: "",
-	"BASE_CLIENT"	: "HTMLDemoClient",
+	"BASE_CLIENT"	: "ASE15Client",
 	"BASE_CLIENT_PARAM"	: "",
 
 	"apv"	: {
@@ -16,5 +16,11 @@
 		"override-client"	: "",
 		"override-param" : "",
 		"override-client-param"	: ""
+	},
+
+	"robo"	: {
+		"relative-path" : "ExampleRobotium",
+		"abs-path"	: "",
+		"api-level"	: "android-17"
 	}
 }

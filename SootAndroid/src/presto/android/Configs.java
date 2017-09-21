@@ -100,7 +100,7 @@ public class Configs {
   public static AsyncOpStrategy asyncStrategy = AsyncOpStrategy.Default_EventHandler_Async;
 
   // [wtg analysis] generate test cases
-  public static boolean genTestCase = false;
+  public static boolean genTestCase = true;
 
   // [test generation] allow loop in wtg forward traversal
   public static boolean allowLoop = false;
