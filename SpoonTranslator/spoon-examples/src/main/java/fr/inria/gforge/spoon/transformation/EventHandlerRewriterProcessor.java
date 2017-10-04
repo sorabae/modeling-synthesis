@@ -25,13 +25,17 @@ public class EventHandlerRewriterProcessor extends AbstractProcessor<CtMethod<?>
 		if (element.getParent() instanceof CtClass) {
 			parent = (CtClass) element.getParent();
 		}
-		return isOnClick(element, parent) || isOnItemClick(element, parent);
+		if (parent == null) return false;
+		return isOnClick(element, parent) || isOnItemClick(element, parent) || isOnOptionsItemSelected(element, parent);
 	}
 	public boolean isOnClick(CtMethod<?> element, CtClass parent) {
-		return element.getSimpleName().equals("onClick") && parent != null && !parent.isAnonymous();
+		return element.getSimpleName().equals("onClick") && !parent.isAnonymous();
 	}
 	public boolean isOnItemClick(CtMethod<?> element, CtClass parent) {
-		return element.getSimpleName().equals("onItemClick") && parent != null && parent.isAnonymous();
+		return element.getSimpleName().equals("onItemClick") && parent.isAnonymous();
+	}
+	public boolean isOnOptionsItemSelected(CtMethod<?> element, CtClass parent) {
+		return element.getSimpleName().equals("onOptionsItemSelected") && !parent.isAnonymous();
 	}
 
 	@Override
@@ -40,6 +44,7 @@ public class EventHandlerRewriterProcessor extends AbstractProcessor<CtMethod<?>
 		switch (element.getSimpleName()) {
 			case "onClick": rewriteOnClick(element); break;
 			case "onItemClick": rewriteOnItemClick(element); break;
+			case "onOptionsItemSelected": rewriteOnOptionsItemSelected(element); break;
 			default: break;
 		}
 	}
@@ -75,6 +80,28 @@ public class EventHandlerRewriterProcessor extends AbstractProcessor<CtMethod<?>
 		id++;
 	}
 
+	public void rewriteOnOptionsItemSelected(CtMethod<?> element) {
+		// Create a wrapper for an onOptionsItemSelected event handler
+		CtMethod<Boolean> wrapper = createBooleanWrapper(element);
+		wrapper.setSimpleName("$wrapper_" + id);
+
+		final CtParameter<Integer> parameter = getFactory().Core().<Integer>createParameter();
+		final CtTypeReference<Integer> integerRef = getFactory().Code().createCtTypeReference(Integer.class);
+		parameter.<CtParameter>setType(integerRef);
+		parameter.setSimpleName("$id");
+		wrapper.addParameter(parameter);
+
+		wrapper.getBody().getElements(new AbstractFilter<CtInvocation<?>>(CtInvocation.class) {
+			@Override
+			public boolean matches(CtInvocation element) {
+				return element.getTarget().toString().equals("item") && element.getExecutable().getSimpleName().equals("getItemId");
+			}
+		}).forEach(e -> e.replace(getFactory().Code().createVariableRead(parameter.getReference(), false)));
+
+		insertWrapperHint(element);
+		id++;
+	}
+
 	public CtMethod<Void> createWrapper(CtMethod<?> element) {
 		CtMethod<Void> wrapper = getFactory().Core().createMethod();
 		element.getParent(CtClass.class).addMethod(wrapper);
@@ -82,6 +109,19 @@ public class EventHandlerRewriterProcessor extends AbstractProcessor<CtMethod<?>
 		wrapper.setModifiers(element.getModifiers());
 		final CtTypeReference<Void> voidRef = getFactory().Code().createCtTypeReference(void.class);
 		wrapper.setType(voidRef);
+		wrapper.setParameters(element.getParameters());
+		wrapper.setBody(element.getBody().clone());
+
+		return wrapper;
+	}
+
+	public CtMethod<Boolean> createBooleanWrapper(CtMethod<?> element) {
+		CtMethod<Boolean> wrapper = getFactory().Core().createMethod();
+		element.getParent(CtClass.class).addMethod(wrapper);
+
+		wrapper.setModifiers(element.getModifiers());
+		final CtTypeReference<Boolean> boolRef = getFactory().Code().createCtTypeReference(boolean.class);
+		wrapper.setType(boolRef);
 		wrapper.setParameters(element.getParameters());
 		wrapper.setBody(element.getBody().clone());
 

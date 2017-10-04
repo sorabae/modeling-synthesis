@@ -309,6 +309,7 @@ public class RoboSynthesizer {
         boolean randomInArg = false;
         switch (handler.getName()) {
           case "onClick":
+          case "onOptionsItemSelected":
             String widget = edge.getGUIWidget().idNode.getIdName();
             arg = "null, R.id" + widget;
             break;
@@ -317,6 +318,7 @@ public class RoboSynthesizer {
           case "onCreateOptionsMenu": continue;
           default:
             System.out.println("Not yet considered event handlers: " + handler.getName());
+            // System.out.println(edge.getGUIWidget().idNode.getIdName());
             arg = "";
             break;
         }
