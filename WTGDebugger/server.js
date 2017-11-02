@@ -24,4 +24,22 @@ io.sockets.on('connection', function (socket) {
       });
     });
   });
+
+  socket.on('Subprogram Synthesis', function (data) {
+    var json = JSON.stringify(data.graph);
+    fs.writeFile('subgraph.json', json, 'utf8', function (err) {
+      if (err) throw err;
+
+      var scriptPath = '/Users/sorabae/Research/gator-3.3/AndroidBench';
+      var options = {
+        scriptPath: scriptPath,
+        args: [data.project,
+               '-client', 'ProgramSynthesisClient', '-subgraph']
+      }
+      python.run('runGatorOnApkClient.py', options, function (err, result) {
+        if (err) throw err;
+        console.log(result);
+      });
+    });
+  });
 });

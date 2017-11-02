@@ -134,6 +134,13 @@ public class WTG {
     return wtgNode;
   }
 
+  public WTGNode getNode(int id) {
+    for (WTGNode node : allNodes.values()) {
+      if (node.getId() == id) return node;
+    }
+    return null;
+  }
+
   public void addBackEdge(WTGEdge forwardEdge, WTGEdge backEdge) {
     Preconditions.checkNotNull(forwardEdge);
     Preconditions.checkNotNull(backEdge);

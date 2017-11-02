@@ -42,6 +42,7 @@ public class ProgramSynthesisClient implements GUIAnalysisClient {
   private String HTML_DIR = "/Users/sorabae/Research/gator-3.3/WTGDebugger";
   private String SEP = File.separator;
   private GUIAnalysisOutput guiOutput;
+  private RoboSynthesizer robo;
 
   @Override
   public void run(GUIAnalysisOutput output) {
@@ -67,45 +68,37 @@ public class ProgramSynthesisClient implements GUIAnalysisClient {
   }
 
   public void synthesis(WTG wtg, JSONObject json) {
-    JSONArray edges = (JSONArray) json.get("edges");
-    if (edges.isEmpty()) return;
-
-    // find out the source node among given nodes
-    WTGNode source = null;
-    JSONObject tmp = (JSONObject) edges.get(0);
-    int sourceId = Integer.parseInt((String) tmp.get("source"));
-    for (WTGNode node : wtg.getNodes()) {
-      if (node.getId() == sourceId) {
-        source = node;
-        break;
-      }
-    }
-    assert(source != null);
-
-    // group edges together if they have the same target node
-    HashMap<WTGNode, List<WTGEdge>> group = new HashMap();
-    for (WTGEdge edge : source.getOutEdges()) {
-      WTGNode key = edge.getTargetNode();
-      List<WTGEdge> value = group.get(key);
-      if (value == null) {
-        value = new ArrayList();
-      }
-      value.add(edge);
-      group.put(key, value);
-    }
-
-    // collect windows
-    List<WTGNode> nodes = new ArrayList(group.keySet());
-    if (!nodes.contains(source)) {
-      nodes.add(source);
-    }
-    List<SootClass> windows = nodes.stream().map(node -> node.getWindow().getClassType()).collect(Collectors.toList());
+    robo = new RoboSynthesizer(guiOutput.getAppPackageName());
 
     // collect method names
-    List<String> methodNames = new ArrayList();
-    methodNames.add(source.getWindow().getClassType().getShortName());
+    List<String> names = new ArrayList();
 
-    // set up test generation template parameters
+    if (Configs.subgraph) {
+      // synthesize for a subgraph
+      // find out the source node
+      JSONArray edges = (JSONArray) json.get("edges");
+      if (edges.isEmpty()) return;
+      JSONObject edge = (JSONObject) edges.get(0);
+      WTGNode source = wtg.getNode(Integer.parseInt((String) edge.get("source")));
+      assert(source != null);
+
+      names.add(source.getWindow().getClassType().getShortName());
+      start(wtg, source);
+    } else {
+      // synthesize each subgraph starting from each node
+      JSONArray nodes = (JSONArray) json.get("nodes");
+      Iterator it = nodes.iterator();
+      while (it.hasNext()) {
+        JSONObject node = (JSONObject) it.next();
+        WTGNode source = wtg.getNode(Integer.parseInt((String) node.get("id")));
+        assert(source != null);
+
+        names.add(source.getWindow().getClassType().getShortName());
+        start(wtg, source);
+      }
+    }
+
+    // set up template parameters first
     Velocity.init();
     VelocityContext context = new VelocityContext();
     SootClass mainActivityClass = guiOutput.getMainActivity();
@@ -118,12 +111,35 @@ public class ProgramSynthesisClient implements GUIAnalysisClient {
     }
     context.put("activity_whole_path", mainActivityClass.getPackageName() + "." + mainActivityClass.getShortName());
 
-    // start generating test cases
-    RoboSynthesizer robo = new RoboSynthesizer(guiOutput.getAppPackageName());
-    robo.synthesizeProgram(group, windows);
+    // write down the synthesized programs on a file using a template
+    genCaseFile(context, "SynthesizedProgram", names, robo);
+  }
 
-    // generate test case file
-    genCaseFile(context, "SynthesizedProgram", methodNames, robo);
+  public void start(WTG wtg, WTGNode source) {
+    // collect edges for this subgraph, and
+    // sort into those having the same target node
+    HashMap<WTGNode, List<WTGEdge>> edges = new HashMap();
+    for (WTGEdge edge : source.getOutEdges()) {
+      WTGNode key = edge.getTargetNode();
+      List<WTGEdge> value = edges.get(key);
+      if (value == null) {
+        value = new ArrayList();
+      }
+      value.add(edge);
+      edges.put(key, value);
+    }
+    if (edges.isEmpty()) return;
+
+    // collect nodes for this subgraph
+    List<WTGNode> nodes = new ArrayList(edges.keySet());
+    if (!nodes.contains(source)) {
+      nodes.add(source);
+    }
+    List<SootClass> windows = nodes.stream().map(node -> node.getWindow().getClassType()).collect(Collectors.toList());
+
+    System.out.println("Synthesize a node (id: " + source.getId() + ", name: " + source.getWindow().getClassType().getShortName() + ")");
+    // start synthesis
+    robo.synthesizeProgram(source.getId(), edges, windows);
   }
 
   /**
@@ -138,6 +154,7 @@ public class ProgramSynthesisClient implements GUIAnalysisClient {
     context.put("helper_list", robo.helpers);
     context.put("global_list", robo.globals);
     context.put("helper_classes", robo.helperClasses);
+    context.put("helper_objects", robo.helperObjects);
     context.put("setup_list", robo.setups);
     try {
       File f = new File(HTML_DIR + SEP + "program.java");

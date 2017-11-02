@@ -54,6 +54,10 @@ public class RoboSynthesizer {
    */
   public final Set<String> helperClasses;
   /**
+   * Helper classes.
+   */
+  public final Set<String> helperObjects;
+  /**
    * All setups.
    */
   public final List<String> setups;
@@ -70,6 +74,7 @@ public class RoboSynthesizer {
     helpers = Sets.newHashSet();
     globals = Sets.newLinkedHashSet();
     helperClasses = Sets.newHashSet();
+    helperObjects = Sets.newHashSet();
     setups = Lists.newArrayList();
     if (Configs.benchmarkName.equals("SuperGenPass")) {
       globals.add("String DOMAIN = \"www.google.com\"");
@@ -172,15 +177,15 @@ public class RoboSynthesizer {
    * Use existing Robotium code to synthesize program
    * representing event modeling
    */
-  public TestCase synthesizeProgram(HashMap<WTGNode, List<WTGEdge>> group, List<SootClass> windows) {
-    TestCase newTestCase = newTestCase();
+  public TestCase synthesizeProgram(int id, HashMap<WTGNode, List<WTGEdge>> edges, List<SootClass> nodes) {
+    TestCase newTestCase = newTestCase(id);
 
-    windows.forEach(window -> HelperDepot.addNecessaryObject(window));
+    nodes.forEach(node -> newTestCase.addHelperObject(node));
 
     // import java.util.Random
     newTestCase.addImport("java.util.Random");
 
-    Iterator<List<WTGEdge>> it = group.values().iterator();
+    Iterator<List<WTGEdge>> it = edges.values().iterator();
     List<WTGEdge> first = it.next();
 
     if (!it.hasNext()) {
@@ -210,8 +215,6 @@ public class RoboSynthesizer {
       newTestCase.append("}");
     }
 
-    HelperDepot.writeNecessaryObjects(newTestCase);
-
     return newTestCase;
   }
 
@@ -233,14 +236,14 @@ public class RoboSynthesizer {
     WTGEdge first = it.next();
     if (!it.hasNext()) {
       synthesizeEdge(testCase, first, indent);
-      genForEdge(testCase, first);
+      //genForEdge(testCase, first);
     } else {
       int i = 0;
       testCase.append(indent + "Random random_body = new Random();");
       testCase.append(indent + "switch (random_body.nextInt(100)) {");
       testCase.append(indent + "\tcase " + i + " : ");
       synthesizeEdge(testCase, first, indent + "\t\t");
-      genForEdge(testCase, first);
+      //genForEdge(testCase, first);
       testCase.append(indent + "\t\t" + "break;");
       i++;
 
@@ -249,12 +252,12 @@ public class RoboSynthesizer {
         if (!it.hasNext()) {
           testCase.append(indent + "\tdefult : ");
           synthesizeEdge(testCase, next, indent + "\t\t");
-          genForEdge(testCase, next);
+          //genForEdge(testCase, next);
           break;
         } else {
           testCase.append(indent + "\tcase " + i + " : ");
           synthesizeEdge(testCase, next, indent + "\t\t");
-          genForEdge(testCase, next);
+          //genForEdge(testCase, next);
           testCase.append(indent + "\t\tbreak;");
           i++;
         }
@@ -300,8 +303,8 @@ public class RoboSynthesizer {
         }
 
         // find the class of the wrapper/method, so that we can call them explicitly
-        HelperDepot.addNecessaryObject(handler.getDeclaringClass());
-        String cls = HelperDepot.trimInnerClass(handler.getDeclaringClass().getShortName());
+        testCase.addHelperObject(handler.getDeclaringClass());
+        String cls = trimInnerClass(handler.getDeclaringClass().getShortName());
         String obj = "Windows.w_" + cls;
 
         // synthesize arguments
@@ -334,7 +337,7 @@ public class RoboSynthesizer {
       for (EventHandler callback : callbacks) {
         SootMethod method = callback.getEventHandler();
 
-        HelperDepot.addNecessaryObject(method.getDeclaringClass());
+        testCase.addHelperObject(method.getDeclaringClass());
         String cls = method.getDeclaringClass().getShortName();
         if (cls.contains("$")) {
           String innerCls = cls.substring(cls.indexOf("$"));
@@ -357,46 +360,6 @@ public class RoboSynthesizer {
         testCase.append(indent + obj + "." + mth + "(" + arg + ");");
       }
     }
-  }
-
-  /**
-   * @param p a path
-   * @return the test case generated for the path
-   */
-  public TestCase generateTestCase(Path p) {
-    Preconditions.checkNotNull(p);
-    if (Configs.benchmarkName.equals("OpenManager")) {
-      Handlers.openmanager_multiselected = false;
-    }
-    TestCase newTestCase = newTestCase(p);
-    if (1 == p.getEdges().size() && p.getStartNode().getWindow() instanceof NLauncherNode) {
-      newTestCase.append("// Start node is automatically triggered\n");
-      return newTestCase;
-    }
-    if (debug) {
-      Logger.verb(getClass().getSimpleName(), "===> path to: " + p.getEndNode());
-      newTestCase.append("// Launcher node ===> " + p.getEndNode());
-    }
-    for (WTGEdge e : p.getEdges()) {
-      if (!debug) {
-        newTestCase.append("// " + e.getSourceNode().getWindow().getClassType()
-            + " => " + e.getTargetNode().getWindow().getClassType());
-      } else {
-        newTestCase.append("// " + e.getSourceNode() + " => " + e.getTargetNode());
-        int resId = HelperDepot.getResId(e.getGUIWidget());
-        String idStr = null;
-        if (-1 != resId) {
-          idStr = e.getGUIWidget().idNode.getIdName();
-        }
-        newTestCase.append("// Event: " + e.getEventType() + ", on: "
-            + e.getGUIWidget() + ", with id: R.id." + idStr
-            + " (0x" + Integer.toHexString(resId) + "), with title: "
-            + HelperDepot.getTitle(e.getGUIWidget()));
-        newTestCase.append("// with handlers: " + e.getEventHandlers());
-      }
-      genForEdge(newTestCase, e);
-    }
-    return newTestCase;
   }
 
   /**
@@ -454,19 +417,8 @@ public class RoboSynthesizer {
     return testCase;
   }
 
-  /**
-   * Create a new test case and add it to the test case collection.
-   *
-   * @return test case created
-   */
-  public TestCase newTestCase(final Path path) {
-    TestCase newCase = new TestCase(path);
-    cases.add(newCase);
-    return newCase;
-  }
-
-  public TestCase newTestCase() {
-    TestCase newCase = new TestCase();
+  public TestCase newTestCase(int id) {
+    TestCase newCase = new TestCase(id);
     cases.add(newCase);
     return newCase;
   }
@@ -482,39 +434,39 @@ public class RoboSynthesizer {
     return rtn;
   }
 
+  public String trimInnerClass(String classname) {
+    int index = classname.indexOf('$');
+    if (index < 0) return classname;
+    return classname.substring(0, index);
+  }
+
   /**
    * Test case class
    */
   public class TestCase {
     // test case body
     private final List<String> body;
-    // corresponding execution path
-    private final Path path;
+    private final int id;
 
-    private TestCase() {
+    private TestCase(final int id) {
       this.body = Lists.newArrayList();
-      this.path = null;
+      this.id = id;
     }
 
-    private TestCase(final Path path) {
-      this.body = Lists.newArrayList();
-      this.path = path;
-    }
-
-    public boolean compareTo(TestCase another) {
-      List<WTGEdge> thisPath = this.path.getEdges();
-      List<WTGEdge> anotherPath = another.path.getEdges();
-      if (thisPath.size() != anotherPath.size()) {
-        return false;
-      } else {
-        for (int i = 0; i < thisPath.size(); i++) {
-          if (thisPath.get(i) != anotherPath.get(i)) {
-            return false;
-          }
-        }
-        return true;
-      }
-    }
+    // public boolean compareTo(TestCase another) {
+    //   List<WTGEdge> thisPath = this.path.getEdges();
+    //   List<WTGEdge> anotherPath = another.path.getEdges();
+    //   if (thisPath.size() != anotherPath.size()) {
+    //     return false;
+    //   } else {
+    //     for (int i = 0; i < thisPath.size(); i++) {
+    //       if (thisPath.get(i) != anotherPath.get(i)) {
+    //         return false;
+    //       }
+    //     }
+    //     return true;
+    //   }
+    // }
 
     /**
      * Add a helper function.
@@ -541,6 +493,17 @@ public class RoboSynthesizer {
      */
     public void addHelperClass(String hcls) {
       helperClasses.add(hcls);
+    }
+
+    /**
+     * Add a helper object.
+     *
+     * @param hobj the helper object
+     */
+    public void addHelperObject(SootClass hobj) {
+      String name = trimInnerClass(hobj.getName());
+      addImport(name);
+      helperObjects.add(name.substring(name.lastIndexOf('.') + 1));
     }
 
     /**
@@ -572,9 +535,9 @@ public class RoboSynthesizer {
       return packName;
     }
 
-    public Path getPath() {
-      return path;
-    }
+    // public Path getPath() {
+    //   return path;
+    // }
 
     public String toCode() {
       String res = "";
@@ -590,7 +553,7 @@ public class RoboSynthesizer {
 
     @Override
     public String toString() {
-      return "RoboTestCase[" + path + "]";
+      return "RoboTestCase[" + id + "]";
     }
   }
 }

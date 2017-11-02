@@ -119,7 +119,9 @@ public class Main {
         Configs.manifestLocation = args[++i];
       } else if ("-resourcePath".equals(s)) {
         Configs.resourceLocation = args[++i];
-      }else {
+      } else if ("-subgraph".equals(s)) {
+        Configs.subgraph = true;
+      } else {
         throw new RuntimeException("Unknown option: " + s);
       }
     }

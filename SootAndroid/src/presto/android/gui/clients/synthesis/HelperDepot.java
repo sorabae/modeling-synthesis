@@ -68,6 +68,11 @@ public class HelperDepot {
       + "  /*\n"
       + "   * ============================== Helpers ==============================\n"
       + "   */\n"
+      + "  static class Necessary {\n"
+      + "#foreach( ${helper_object} in ${helper_objects} )\n"
+      + "  public static final ${helper_object} w_${helper_object} = new ${helper_object}();\n"
+      + "#end"
+      + "  }\n"
       + "#foreach( ${helper} in ${helper_list} )\n"
       + "${helper}\n"
       + "#end"
@@ -423,29 +428,6 @@ public class HelperDepot {
 
   @SuppressWarnings("unused")
   private static int counter = 100;
-
-  private static List<SootClass> necessaryObjects = new ArrayList<SootClass>();
-  public static void addNecessaryObject(SootClass object) {
-    if (!necessaryObjects.contains(object))
-      necessaryObjects.add(object);
-  }
-  public static void writeNecessaryObjects(RoboSynthesizer.TestCase testCase) {
-    String helper = "  static class Necessary {\n";
-    Set<String> objects = new HashSet<>(necessaryObjects.stream().map(obj -> trimInnerClass(obj.getName())).collect(Collectors.toList()));
-    for (String object: objects) {
-      testCase.addImport(object);
-      String name = object.substring(object.lastIndexOf('.') + 1);
-      helper += "    public static final " + name + " w_" + name + " = new " + name + "();\n";
-    }
-    helper += "  }\n";
-    testCase.addHelperClass(helper);
-  }
-
-  public static String trimInnerClass(String classname) {
-    int index = classname.indexOf('$');
-    if (index < 0) return classname;
-    return classname.substring(0, index);
-  }
 
   public static void addPaiSupport(RoboSynthesizer.TestCase testCase) {
     testCase.addHelperClass(f_pai_ase15);

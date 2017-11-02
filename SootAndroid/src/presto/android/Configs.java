@@ -113,6 +113,9 @@ public class Configs {
   // [test generation] test cases generation strategy
   public static TestGenStrategy testGenStrategy = null;
 
+  // [program synthesis] synthesize for a subgraph
+  public static boolean subgraph = false;
+
   public static boolean instrument = false;
 
   // Mock testing flags
