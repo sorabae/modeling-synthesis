@@ -139,7 +139,7 @@ public class ProgramSynthesisClient implements GUIAnalysisClient {
 
     System.out.println("Synthesize a node (id: " + source.getId() + ", name: " + source.getWindow().getClassType().getShortName() + ")");
     // start synthesis
-    robo.synthesizeProgram(source.getId(), edges, windows);
+    robo.synthesizeProgram(source, edges, windows);
   }
 
   /**

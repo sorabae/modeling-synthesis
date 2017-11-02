@@ -177,8 +177,8 @@ public class RoboSynthesizer {
    * Use existing Robotium code to synthesize program
    * representing event modeling
    */
-  public TestCase synthesizeProgram(int id, HashMap<WTGNode, List<WTGEdge>> edges, List<SootClass> nodes) {
-    TestCase newTestCase = newTestCase(id);
+  public TestCase synthesizeProgram(WTGNode source, HashMap<WTGNode, List<WTGEdge>> edges, List<SootClass> nodes) {
+    TestCase newTestCase = newTestCase(source);
 
     nodes.forEach(node -> newTestCase.addHelperObject(node));
 
@@ -417,8 +417,8 @@ public class RoboSynthesizer {
     return testCase;
   }
 
-  public TestCase newTestCase(int id) {
-    TestCase newCase = new TestCase(id);
+  public TestCase newTestCase(WTGNode source) {
+    TestCase newCase = new TestCase(source);
     cases.add(newCase);
     return newCase;
   }
@@ -429,7 +429,7 @@ public class RoboSynthesizer {
   public ArrayList<String> casesAsStrings() {
     ArrayList<String> rtn = Lists.newArrayList();
     for (TestCase c : cases) {
-      rtn.add(Util.prepend(c.toCode(), "    "));
+      rtn.add(Util.prepend(c.toCode(), "  "));
     }
     return rtn;
   }
@@ -446,11 +446,11 @@ public class RoboSynthesizer {
   public class TestCase {
     // test case body
     private final List<String> body;
-    private final int id;
+    private final WTGNode source;
 
-    private TestCase(final int id) {
+    private TestCase(final WTGNode source) {
       this.body = Lists.newArrayList();
-      this.id = id;
+      this.source = source;
     }
 
     // public boolean compareTo(TestCase another) {
@@ -535,15 +535,12 @@ public class RoboSynthesizer {
       return packName;
     }
 
-    // public Path getPath() {
-    //   return path;
-    // }
-
     public String toCode() {
-      String res = "";
+      String res = "public void m_" + source.getWindow().getClassType().getShortName() + "() throws Exception {\n";
       for (int i = 0; i < body.size(); ++i) {
-        res += (i == 0 ? "" : "\n") + body.get(i);
+        res += "  " + body.get(i) + "\n";
       }
+      res += "}\n";
       return res;
     }
 
@@ -553,7 +550,7 @@ public class RoboSynthesizer {
 
     @Override
     public String toString() {
-      return "RoboTestCase[" + id + "]";
+      return "RoboTestCase[" + source.getId() + "]";
     }
   }
 }

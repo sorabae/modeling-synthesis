@@ -25,10 +25,60 @@ public class SynthesizedProgram {
   public SynthesizedProgram() {
   }
 
-  public void m_SplashActivity() throws Exception {
+  public void m_MemoActivity$SinglePlayerWinDialog() throws Exception {
     Random random = new Random();
     switch (random.nextInt(100)) {
     	case 0 : 
+    		Random random_branch = new Random();
+    		while (random_branch.nextInt) {
+    			Random random_body = new Random();
+    			switch (random_body.nextInt(100)) {
+    				case 0 : 
+    					// implicit_power_event
+    					Windows.w_MemoActivity.onPause();
+    					Windows.w_MemoActivity.onResume();
+    					break;
+    				defult : 
+    					// implicit_home_event
+    					Windows.w_MemoActivity.onPause();
+    					Windows.w_MemoActivity.onResume();
+    			}
+    		}
+    		break;
+    	defult : 
+    		Random random_body = new Random();
+    		switch (random_body.nextInt(100)) {
+    			case 0 : 
+    				// implicit_rotate_event
+    				Windows.w_MemoActivity.onPause();
+    				Windows.w_MemoActivity.onCreate(null);
+    				Windows.w_MemoActivity.onResume();
+    				break;
+    			defult : 
+    				// implicit_back_event
+    		}
+    		m_MemoActivity();
+    }
+  }
+
+  public void m_MemoActivity$DuoPlayerWinDialog() throws Exception {
+    Random random = new Random();
+    switch (random.nextInt(100)) {
+    	case 0 : 
+    		Random random_body = new Random();
+    		switch (random_body.nextInt(100)) {
+    			case 0 : 
+    				// implicit_rotate_event
+    				Windows.w_MemoActivity.onPause();
+    				Windows.w_MemoActivity.onCreate(null);
+    				Windows.w_MemoActivity.onResume();
+    				break;
+    			defult : 
+    				// implicit_back_event
+    		}
+    		m_MemoActivity();
+    		break;
+    	defult : 
     		Random random_branch = new Random();
     		while (random_branch.nextInt) {
     			Random random_body = new Random();
@@ -44,60 +94,10 @@ public class SynthesizedProgram {
     					Windows.w_MemoActivity.onResume();
     			}
     		}
-    		break;
-    	defult : 
-    		Random random_body = new Random();
-    		switch (random_body.nextInt(100)) {
-    			case 0 : 
-    				// implicit_back_event
-    				break;
-    			defult : 
-    				// implicit_rotate_event
-    				Windows.w_MemoActivity.onPause();
-    				Windows.w_MemoActivity.onCreate(null);
-    				Windows.w_MemoActivity.onResume();
-    		}
-    		m_MemoActivity();
     }
   }
 
-  public void m_AlertDialog() throws Exception {
-    Random random = new Random();
-    switch (random.nextInt(100)) {
-    	case 0 : 
-    		Random random_body = new Random();
-    		switch (random_body.nextInt(100)) {
-    			case 0 : 
-    				// implicit_rotate_event
-    				Windows.w_MemoActivity.onPause();
-    				Windows.w_MemoActivity.onCreate(null);
-    				Windows.w_MemoActivity.onResume();
-    				break;
-    			defult : 
-    				// implicit_back_event
-    		}
-    		m_MemoActivity();
-    		break;
-    	defult : 
-    		Random random_branch = new Random();
-    		while (random_branch.nextInt) {
-    			Random random_body = new Random();
-    			switch (random_body.nextInt(100)) {
-    				case 0 : 
-    					// implicit_home_event
-    					Windows.w_MemoActivity.onPause();
-    					Windows.w_MemoActivity.onResume();
-    					break;
-    				defult : 
-    					// implicit_power_event
-    					Windows.w_MemoActivity.onPause();
-    					Windows.w_MemoActivity.onResume();
-    			}
-    		}
-    }
-  }
-
-  public void m_DeckChoiceActivity() throws Exception {
+  public void m_Menu() throws Exception {
     Random random = new Random();
     switch (random.nextInt(100)) {
     	case 0 : 
@@ -114,25 +114,25 @@ public class SynthesizedProgram {
     		Random random_body = new Random();
     		switch (random_body.nextInt(100)) {
     			case 0 : 
-    				// implicit_home_event
+    				// implicit_power_event
     				Windows.w_AppCompatPreferenceActivity.onStop();
     				break;
     			case 1 : 
-    				// implicit_back_event
-    				break;
-    			case 2 : 
     				// click
     				Windows.w_HighscoreActivity.onOptionsItemSelected(null, R.idmenu_highscore_reset);
     				break;
+    			case 2 : 
+    				// implicit_back_event
+    				break;
     			defult : 
-    				// implicit_power_event
+    				// implicit_home_event
     				Windows.w_AppCompatPreferenceActivity.onStop();
     		}
     		m_HighscoreActivity();
     }
   }
 
-  public void m_MemoActivity$SinglePlayerWinDialog() throws Exception {
+  public void m_Menu() throws Exception {
     Random random = new Random();
     switch (random.nextInt(100)) {
     	case 0 : 
@@ -147,43 +147,43 @@ public class SynthesizedProgram {
     		Random random_body = new Random();
     		switch (random_body.nextInt(100)) {
     			case 0 : 
-    				// implicit_home_event
-    				break;
-    			case 1 : 
-    				// implicit_power_event
-    				break;
-    			case 2 : 
-    				// implicit_back_event
-    				break;
-    			defult : 
     				// click
     				Windows.w_StatisticsActivity.onOptionsItemSelected(null, R.idmenu_statistics_reset);
+    				break;
+    			case 1 : 
+    				// implicit_back_event
+    				break;
+    			case 2 : 
+    				// implicit_home_event
+    				break;
+    			defult : 
+    				// implicit_power_event
     		}
     		m_StatisticsActivity();
     }
   }
 
-  public void m_Menu() throws Exception {
+  public void m_PrestoFakeLauncherNodeClass() throws Exception {
     		// implicit_launch_event
     		Windows.w_SplashActivity.onCreate(null);
     		Windows.w_MainActivity.onCreate(null);
     		m_MainActivity();
   }
 
-  public void m_StatisticsActivity() throws Exception {
+  public void m_HelpActivity() throws Exception {
     		Random random_branch = new Random();
     		while (random_branch.nextInt) {
     			Random random_body = new Random();
     			switch (random_body.nextInt(100)) {
     				case 0 : 
+    					// implicit_power_event
+    					Windows.w_AppCompatPreferenceActivity.onStop();
+    					break;
+    				case 1 : 
     					// implicit_rotate_event
     					Windows.w_AppCompatPreferenceActivity.onStop();
     					Windows.w_AppCompatPreferenceActivity.onDestroy();
     					Windows.w_HelpActivity.onCreate(null);
-    					break;
-    				case 1 : 
-    					// implicit_power_event
-    					Windows.w_AppCompatPreferenceActivity.onStop();
     					break;
     				defult : 
     					// implicit_home_event
@@ -223,29 +223,29 @@ public class SynthesizedProgram {
     }
   }
 
-  public void m_HelpActivity() throws Exception {
+  public void m_DeckChoiceActivity() throws Exception {
     		Random random_branch = new Random();
     		while (random_branch.nextInt) {
     			Random random_body = new Random();
     			switch (random_body.nextInt(100)) {
     				case 0 : 
-    					// implicit_rotate_event
+    					// implicit_home_event
     					Windows.w_AppCompatPreferenceActivity.onStop();
-    					Windows.w_AppCompatPreferenceActivity.onDestroy();
-    					Windows.w_DeckChoiceActivity.onCreate(null);
     					break;
     				case 1 : 
     					// implicit_power_event
     					Windows.w_AppCompatPreferenceActivity.onStop();
     					break;
     				defult : 
-    					// implicit_home_event
+    					// implicit_rotate_event
     					Windows.w_AppCompatPreferenceActivity.onStop();
+    					Windows.w_AppCompatPreferenceActivity.onDestroy();
+    					Windows.w_DeckChoiceActivity.onCreate(null);
     			}
     		}
   }
 
-  public void m_MemoActivity() throws Exception {
+  public void m_SplashActivity() throws Exception {
     Random random = new Random();
     switch (random.nextInt(100)) {
     	case 0 : 
@@ -261,17 +261,17 @@ public class SynthesizedProgram {
     					// implicit_home_event
     					break;
     				case 1 : 
-    					// implicit_power_event
-    					break;
-    				defult : 
     					// implicit_rotate_event
     					Windows.w_SplashActivity.onCreate(null);
+    					break;
+    				defult : 
+    					// implicit_power_event
     			}
     		}
     }
   }
 
-  public void m_MainActivity() throws Exception {
+  public void m_StatisticsActivity() throws Exception {
     Random random = new Random();
     switch (random.nextInt(100)) {
     	case 0 : 
@@ -285,20 +285,20 @@ public class SynthesizedProgram {
     			Random random_body = new Random();
     			switch (random_body.nextInt(100)) {
     				case 0 : 
+    					// implicit_home_event
+    					break;
+    				case 1 : 
     					// implicit_rotate_event
     					Windows.w_StatisticsActivity.onCreate(null);
     					break;
-    				case 1 : 
-    					// implicit_power_event
-    					break;
     				defult : 
-    					// implicit_home_event
+    					// implicit_power_event
     			}
     		}
     }
   }
 
-  public void m_Menu() throws Exception {
+  public void m_MainActivity() throws Exception {
     Random random = new Random();
     switch (random.nextInt(100)) {
     	case 0 : 
@@ -306,13 +306,13 @@ public class SynthesizedProgram {
     		switch (random_body.nextInt(100)) {
     			case 0 : 
     				// click
-    				Windows.w_MainActivity.onClick(null, R.idplayButton);
+    				Windows.w_MainActivity.onClick(null, R.idarrow_left);
     				Windows.w_MemoActivity.onCreate(null);
     				Windows.w_MemoActivity.onResume();
     				break;
     			case 1 : 
     				// click
-    				Windows.w_MainActivity.onClick(null, R.idarrow_left);
+    				Windows.w_MainActivity.onClick(null, R.idplayButton);
     				Windows.w_MemoActivity.onCreate(null);
     				Windows.w_MemoActivity.onResume();
     				break;
@@ -331,11 +331,11 @@ public class SynthesizedProgram {
     			switch (random_body.nextInt(100)) {
     				case 0 : 
     					// click
-    					Windows.w_MainActivity.onClick(null, R.idplayButton);
+    					Windows.w_MainActivity.onClick(null, R.idarrow_right);
     					break;
     				case 1 : 
     					// click
-    					Windows.w_MainActivity.onClick(null, R.idarrow_right);
+    					Windows.w_MainActivity.onClick(null, R.idplayButton);
     					break;
     				case 2 : 
     					// click
@@ -359,7 +359,7 @@ public class SynthesizedProgram {
     }
   }
 
-  public void m_AboutActivity() throws Exception {
+  public void m_MemoActivity() throws Exception {
     Random random = new Random();
     switch (random.nextInt(100)) {
     	case 0 : 
@@ -378,8 +378,9 @@ public class SynthesizedProgram {
     					Windows.w_MemoActivity.onItemClick(null, null, new Random().nextInt(100), null);
     					break;
     				case 1 : 
-    					// implicit_home_event
+    					// implicit_rotate_event
     					Windows.w_MemoActivity.onPause();
+    					Windows.w_MemoActivity.onCreate(null);
     					Windows.w_MemoActivity.onResume();
     					break;
     				case 2 : 
@@ -388,9 +389,8 @@ public class SynthesizedProgram {
     					Windows.w_MemoActivity.onResume();
     					break;
     				defult : 
-    					// implicit_rotate_event
+    					// implicit_home_event
     					Windows.w_MemoActivity.onPause();
-    					Windows.w_MemoActivity.onCreate(null);
     					Windows.w_MemoActivity.onResume();
     			}
     		}
@@ -408,17 +408,17 @@ public class SynthesizedProgram {
     }
   }
 
-  public void m_MemoActivity$DuoPlayerWinDialog() throws Exception {
+  public void m_AboutActivity() throws Exception {
     		Random random_branch = new Random();
     		while (random_branch.nextInt) {
     			Random random_body = new Random();
     			switch (random_body.nextInt(100)) {
     				case 0 : 
-    					// implicit_rotate_event
-    					Windows.w_AboutActivity.onCreate(null);
+    					// implicit_home_event
     					break;
     				case 1 : 
-    					// implicit_home_event
+    					// implicit_rotate_event
+    					Windows.w_AboutActivity.onCreate(null);
     					break;
     				defult : 
     					// implicit_power_event
