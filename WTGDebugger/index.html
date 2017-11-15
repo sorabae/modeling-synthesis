@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 	<head>
-		<title hidden>example/toy.apk</title>		<meta charset='UTF-8'>
+		<title hidden>/home/cce13st/dev/modeling-synthesis/AndroidBench/ExampleRobotium</title>		<meta charset='UTF-8'>
 		<link rel='stylesheet' href='css/bootstrap.min.css' type='text/css'>
 		<link rel='stylesheet' href='css/style.css' type='text/css'>
 		<link rel='stylesheet' href='css/core.css' type='text/css'>
@@ -12,83 +12,56 @@
 		<script src='cytoscape-dagre.js'></script>
 		<script>
 			var wtg_DB = { nodes : [
-{ data: { id: 2, content: 'ACT[org.secuso.privacyfriendlymemory.ui.navigation.AboutActivity]983', border: 2 } },
-{ data: { id: 3, content: 'ACT[org.secuso.privacyfriendlymemory.ui.navigation.HighscoreActivity]994', border: 2 } },
-{ data: { id: 8, content: 'ACT[org.secuso.privacyfriendlymemory.ui.navigation.DeckChoiceActivity]1029', border: 2 } },
-{ data: { id: 4, content: 'ACT[org.secuso.privacyfriendlymemory.ui.SplashActivity]1002', border: 2 } },
-{ data: { id: 10, content: 'DIALOG[org.secuso.privacyfriendlymemory.ui.MemoActivity$DuoPlayerWinDialog]1339, alloc: <org.secuso.privacyfriendlymemory.ui.MemoActivity: void showWinDialog()>', border: 2 } },
-{ data: { id: 7, content: 'ACT[org.secuso.privacyfriendlymemory.ui.MainActivity]1024', border: 2 } },
-{ data: { id: 9, content: 'DIALOG[org.secuso.privacyfriendlymemory.ui.MemoActivity$SinglePlayerWinDialog]1365, alloc: <org.secuso.privacyfriendlymemory.ui.MemoActivity: void showWinDialog()>', border: 2 } },
-{ data: { id: 12, content: 'OptionsMenu[org.secuso.privacyfriendlymemory.ui.navigation.HighscoreActivity]987', border: 2 } },
-{ data: { id: 11, content: 'DIALOG[android.app.AlertDialog]2542, alloc: <org.secuso.privacyfriendlymemory.ui.MainActivity$WelcomeDialog: android.app.Dialog onCreateDialog(android.os.Bundle)>', border: 2 } },
-{ data: { id: 13, content: 'OptionsMenu[org.secuso.privacyfriendlymemory.ui.navigation.StatisticsActivity]1005', border: 2 } },
-{ data: { id: 14, content: 'LAUNCHER_NODE[]2769', border: 2 } },
-{ data: { id: 1, content: 'ACT[org.secuso.privacyfriendlymemory.ui.navigation.HelpActivity]965', border: 2 } },
-{ data: { id: 5, content: 'ACT[org.secuso.privacyfriendlymemory.ui.navigation.StatisticsActivity]1011', border: 2 } },
-{ data: { id: 6, content: 'ACT[org.secuso.privacyfriendlymemory.ui.MemoActivity]1016', border: 2 } },
-], edges : [ { data: { source: 6, target: 6, content: 'implicit_rotate_event' } },
-{ data: { source: 3, target: 12, content: 'click' } },
-{ data: { source: 5, target: 5, content: 'implicit_home_event' } },
-{ data: { source: 4, target: 4, content: 'implicit_power_event' } },
-{ data: { source: 7, target: 6, content: 'click' } },
-{ data: { source: 7, target: 6, content: 'click' } },
-{ data: { source: 7, target: 6, content: 'click' } },
-{ data: { source: 8, target: 8, content: 'implicit_power_event' } },
-{ data: { source: 14, target: 7, content: 'implicit_launch_event' } },
-{ data: { source: 1, target: 1, content: 'implicit_home_event' } },
-{ data: { source: 6, target: 6, content: 'implicit_power_event' } },
-{ data: { source: 13, target: 5, content: 'implicit_power_event' } },
-{ data: { source: 13, target: 5, content: 'click' } },
-{ data: { source: 7, target: 7, content: 'implicit_power_event' } },
-{ data: { source: 3, target: 3, content: 'implicit_home_event' } },
-{ data: { source: 9, target: 6, content: 'implicit_rotate_event' } },
-{ data: { source: 6, target: 6, content: 'item_click' } },
-{ data: { source: 1, target: 1, content: 'implicit_rotate_event' } },
-{ data: { source: 12, target: 3, content: 'implicit_power_event' } },
-{ data: { source: 6, target: 6, content: 'implicit_home_event' } },
-{ data: { source: 8, target: 8, content: 'implicit_rotate_event' } },
-{ data: { source: 10, target: 6, content: 'implicit_rotate_event' } },
-{ data: { source: 12, target: 3, content: 'implicit_back_event' } },
-{ data: { source: 13, target: 13, content: 'implicit_rotate_event' } },
-{ data: { source: 5, target: 5, content: 'implicit_power_event' } },
-{ data: { source: 7, target: 7, content: 'click' } },
-{ data: { source: 7, target: 7, content: 'click' } },
-{ data: { source: 7, target: 7, content: 'click' } },
-{ data: { source: 12, target: 12, content: 'implicit_rotate_event' } },
-{ data: { source: 10, target: 10, content: 'implicit_power_event' } },
-{ data: { source: 2, target: 2, content: 'implicit_power_event' } },
-{ data: { source: 12, target: 3, content: 'click' } },
-{ data: { source: 3, target: 3, content: 'implicit_rotate_event' } },
-{ data: { source: 9, target: 6, content: 'implicit_back_event' } },
-{ data: { source: 4, target: 4, content: 'implicit_home_event' } },
+{ data: { id: 4, content: 'ACT[com.example.android.notepad.NoteEditor]792', border: 2 } },
+{ data: { id: 1, content: 'ACT[com.example.android.notepad.NotesLiveFolder]749', border: 2 } },
+{ data: { id: 2, content: 'ACT[com.example.android.notepad.TitleEditor]752', border: 2 } },
+{ data: { id: 6, content: 'ContextMenu[VAR[r1]995]1299', border: 2 } },
+{ data: { id: 3, content: 'ACT[com.example.android.notepad.NotesList]773', border: 2 } },
+{ data: { id: 5, content: 'OptionsMenu[com.example.android.notepad.NotesList]757', border: 2 } },
+{ data: { id: 8, content: 'LAUNCHER_NODE[]1422', border: 2 } },
+{ data: { id: 7, content: 'OptionsMenu[com.example.android.notepad.NoteEditor]782', border: 2 } },
+], edges : [ { data: { source: 4, target: 4, content: 'implicit_rotate_event' } },
 { data: { source: 7, target: 4, content: 'implicit_back_event' } },
-{ data: { source: 1, target: 1, content: 'implicit_power_event' } },
-{ data: { source: 9, target: 9, content: 'implicit_power_event' } },
-{ data: { source: 5, target: 13, content: 'click' } },
-{ data: { source: 3, target: 3, content: 'implicit_power_event' } },
-{ data: { source: 7, target: 7, content: 'implicit_rotate_event' } },
-{ data: { source: 8, target: 8, content: 'implicit_home_event' } },
-{ data: { source: 7, target: 7, content: 'implicit_home_event' } },
-{ data: { source: 10, target: 6, content: 'implicit_back_event' } },
-{ data: { source: 13, target: 5, content: 'implicit_home_event' } },
-{ data: { source: 5, target: 5, content: 'implicit_rotate_event' } },
+{ data: { source: 7, target: 4, content: 'implicit_home_event' } },
+{ data: { source: 5, target: 3, content: 'implicit_power_event' } },
 { data: { source: 2, target: 2, content: 'implicit_home_event' } },
-{ data: { source: 9, target: 9, content: 'implicit_home_event' } },
-{ data: { source: 4, target: 4, content: 'implicit_rotate_event' } },
-{ data: { source: 13, target: 5, content: 'implicit_back_event' } },
-{ data: { source: 6, target: 7, content: 'implicit_back_event' } },
-{ data: { source: 6, target: 10, content: 'item_click' } },
-{ data: { source: 6, target: 9, content: 'item_click' } },
-{ data: { source: 4, target: 14, content: 'implicit_back_event' } },
-{ data: { source: 12, target: 3, content: 'implicit_home_event' } },
-{ data: { source: 10, target: 10, content: 'implicit_home_event' } },
+{ data: { source: 3, target: 3, content: 'implicit_power_event' } },
+{ data: { source: 1, target: 1, content: 'implicit_power_event' } },
+{ data: { source: 7, target: 4, content: 'implicit_power_event' } },
+{ data: { source: 6, target: 3, content: 'implicit_home_event' } },
+{ data: { source: 8, target: 3, content: 'implicit_launch_event' } },
+{ data: { source: 3, target: 3, content: 'implicit_rotate_event' } },
+{ data: { source: 3, target: 3, content: 'long_click' } },
+{ data: { source: 3, target: 3, content: 'item_click' } },
+{ data: { source: 1, target: 1, content: 'implicit_rotate_event' } },
+{ data: { source: 6, target: 3, content: 'implicit_rotate_event' } },
+{ data: { source: 3, target: 3, content: 'implicit_home_event' } },
+{ data: { source: 3, target: 6, content: 'long_click' } },
+{ data: { source: 5, target: 3, content: 'implicit_home_event' } },
 { data: { source: 2, target: 2, content: 'implicit_rotate_event' } },
+{ data: { source: 5, target: 5, content: 'implicit_rotate_event' } },
+{ data: { source: 6, target: 3, content: 'implicit_power_event' } },
+{ data: { source: 4, target: 4, content: 'implicit_power_event' } },
+{ data: { source: 1, target: 1, content: 'implicit_home_event' } },
+{ data: { source: 3, target: 8, content: 'implicit_back_event' } },
+{ data: { source: 3, target: 5, content: 'click' } },
+{ data: { source: 6, target: 3, content: 'implicit_back_event' } },
+{ data: { source: 5, target: 3, content: 'implicit_back_event' } },
+{ data: { source: 4, target: 7, content: 'click' } },
+{ data: { source: 2, target: 2, content: 'click' } },
+{ data: { source: 2, target: 2, content: 'implicit_power_event' } },
+{ data: { source: 4, target: 4, content: 'implicit_home_event' } },
+{ data: { source: 7, target: 7, content: 'implicit_rotate_event' } },
+{ data: { source: 6, target: 3, content: 'click' } },
+{ data: { source: 6, target: 3, content: 'click' } },
+{ data: { source: 6, target: 3, content: 'click' } },
 			]};
 		</script>
+		<script src='testgen.js' type='text/javascript'></script>
 		<script src='core.js' type='text/javascript'></script>
 	</head>
 	<body>
-		<div class='container'>
+		<div class='container-fluid'>
 			<div class='header clearfix::after'>
 				<h3 class='text-muted'>WTG Debugger</h3>
 			</div>
@@ -102,7 +75,7 @@
 							<button type='button' class='btn btn-primary synthesis' id='synthesis-all'>Synthesize</button>
 						</div>
 					</div>
-					<div id='cy'></div>
+					<div id='cy' style='position: relative;'></div>
 				</div>
 				<div class='col-lg-6'>
 					<div class='row'>
@@ -113,9 +86,479 @@
 							<button type='button' class='btn btn-primary synthesis' id='synthesis-part'>Synthesize</button>
 						</div>
 					</div>
-					<div id='cy_part'></div>
+					<div id='cy_part' style='position: relative;'></div>
 				</div>
 			</div>
 		</div>
+		<div class='container-fluid' style='position: relative;'>
+			<table class='table'>
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>Type</th>
+						<th>Name</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>1</td>
+						<td>ACT</td>
+						<td>com.example.android.notepad.NotesLiveFolder</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>ACT</td>
+						<td>com.example.android.notepad.TitleEditor</td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>ACT</td>
+						<td>com.example.android.notepad.NotesList</td>
+					</tr>
+					<tr>
+						<td>4</td>
+						<td>ACT</td>
+						<td>com.example.android.notepad.NoteEditor</td>
+					</tr>
+					<tr>
+						<td>5</td>
+						<td>OptionsMenu</td>
+						<td>com.example.android.notepad.NotesList</td>
+					</tr>
+					<tr>
+						<td>6</td>
+						<td>ContextMenu</td>
+						<td>r1</td>
+					</tr>
+					<tr>
+						<td>7</td>
+						<td>OptionsMenu</td>
+						<td>com.example.android.notepad.NoteEditor</td>
+					</tr>
+					<tr>
+						<td>8</td>
+						<td>LAUNCHER_NODE</td>
+						<td></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>		<hr>
+		<div class='container-fluid' style='position: relative;'>
+		<table class='table'>
+			<thead>
+				<tr>
+					<th>Source</th>
+					<th>Target</th>
+					<th>Root</th>
+					<th>WTG Handlers</th>
+					<th>Callbacks</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>4</td>
+					<td>4</td>
+					<td>implicit_rotate</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_rotate_event, null&gt;<br>
+					</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_lifecycle_event, &lt;com.example.android.notepad.NoteEditor: void onPause()&gt;&gt;<br>
+						1: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_lifecycle_event, &lt;com.example.android.notepad.NoteEditor: void onCreate(android.os.Bundle)&gt;&gt;<br>
+						2: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_lifecycle_event, &lt;com.example.android.notepad.NoteEditor: void onResume()&gt;&gt;<br>
+					</td>
+				</tr>
+				<tr>
+					<td>7</td>
+					<td>4</td>
+					<td>implicit_back</td>
+					<td>
+						0: &lt;OptionsMenu[com.example.android.notepad.NoteEditor]782, OptionsMenu[com.example.android.notepad.NoteEditor]782, implicit_back_event, null&gt;<br>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>7</td>
+					<td>4</td>
+					<td>implicit_home</td>
+					<td>
+						0: &lt;OptionsMenu[com.example.android.notepad.NoteEditor]782, OptionsMenu[com.example.android.notepad.NoteEditor]782, implicit_home_event, null&gt;<br>
+					</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_lifecycle_event, &lt;com.example.android.notepad.NoteEditor: void onPause()&gt;&gt;<br>
+						1: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_lifecycle_event, &lt;com.example.android.notepad.NoteEditor: void onResume()&gt;&gt;<br>
+					</td>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>3</td>
+					<td>implicit_power</td>
+					<td>
+						0: &lt;OptionsMenu[com.example.android.notepad.NotesList]757, OptionsMenu[com.example.android.notepad.NotesList]757, implicit_power_event, null&gt;<br>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>2</td>
+					<td>implicit_home</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.TitleEditor]752, ACT[com.example.android.notepad.TitleEditor]752, implicit_home_event, null&gt;<br>
+					</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.TitleEditor]752, ACT[com.example.android.notepad.TitleEditor]752, implicit_lifecycle_event, &lt;com.example.android.notepad.TitleEditor: void onPause()&gt;&gt;<br>
+						1: &lt;ACT[com.example.android.notepad.TitleEditor]752, ACT[com.example.android.notepad.TitleEditor]752, implicit_lifecycle_event, &lt;com.example.android.notepad.TitleEditor: void onResume()&gt;&gt;<br>
+					</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>3</td>
+					<td>implicit_power</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NotesList]773, ACT[com.example.android.notepad.NotesList]773, implicit_power_event, null&gt;<br>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>1</td>
+					<td>1</td>
+					<td>implicit_power</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NotesLiveFolder]749, ACT[com.example.android.notepad.NotesLiveFolder]749, implicit_power_event, null&gt;<br>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>7</td>
+					<td>4</td>
+					<td>implicit_power</td>
+					<td>
+						0: &lt;OptionsMenu[com.example.android.notepad.NoteEditor]782, OptionsMenu[com.example.android.notepad.NoteEditor]782, implicit_power_event, null&gt;<br>
+					</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_lifecycle_event, &lt;com.example.android.notepad.NoteEditor: void onPause()&gt;&gt;<br>
+						1: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_lifecycle_event, &lt;com.example.android.notepad.NoteEditor: void onResume()&gt;&gt;<br>
+					</td>
+				</tr>
+				<tr>
+					<td>6</td>
+					<td>3</td>
+					<td>implicit_home</td>
+					<td>
+						0: &lt;ContextMenu[VAR[r1]995]1299, ContextMenu[VAR[r1]995]1299, implicit_home_event, null&gt;<br>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>8</td>
+					<td>3</td>
+					<td>implicit_launch</td>
+					<td>
+						0: &lt;LAUNCHER_NODE[]1422, LAUNCHER_NODE[]1422, implicit_launch_event, null&gt;<br>
+					</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NotesList]773, ACT[com.example.android.notepad.NotesList]773, implicit_lifecycle_event, &lt;com.example.android.notepad.NotesList: void onCreate(android.os.Bundle)&gt;&gt;<br>
+					</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>3</td>
+					<td>implicit_rotate</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NotesList]773, ACT[com.example.android.notepad.NotesList]773, implicit_rotate_event, null&gt;<br>
+					</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NotesList]773, ACT[com.example.android.notepad.NotesList]773, implicit_lifecycle_event, &lt;com.example.android.notepad.NotesList: void onCreate(android.os.Bundle)&gt;&gt;<br>
+					</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>3</td>
+					<td>cyclic_edge</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NotesList]773, INFL[android.widget.ListView,WID[16908298|list]272,773]1307, long_click, &lt;com.example.android.notepad.NotesList: void onCreateContextMenu(android.view.ContextMenu,android.view.View,android.view.ContextMenu$ContextMenuInfo)&gt;&gt;<br>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>3</td>
+					<td>cyclic_edge</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NotesList]773, INFL[android.widget.ListView,WID[16908298|list]272,773]1307, item_click, &lt;FakeName_15: void onItemClick(android.widget.AdapterView,android.view.View,int,long)&gt;&gt;<br>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>1</td>
+					<td>1</td>
+					<td>implicit_rotate</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NotesLiveFolder]749, ACT[com.example.android.notepad.NotesLiveFolder]749, implicit_rotate_event, null&gt;<br>
+					</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NotesLiveFolder]749, ACT[com.example.android.notepad.NotesLiveFolder]749, implicit_lifecycle_event, &lt;com.example.android.notepad.NotesLiveFolder: void onCreate(android.os.Bundle)&gt;&gt;<br>
+					</td>
+				</tr>
+				<tr>
+					<td>6</td>
+					<td>3</td>
+					<td>implicit_rotate</td>
+					<td>
+						0: &lt;ContextMenu[VAR[r1]995]1299, ContextMenu[VAR[r1]995]1299, implicit_rotate_event, null&gt;<br>
+					</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NotesList]773, ACT[com.example.android.notepad.NotesList]773, implicit_lifecycle_event, &lt;com.example.android.notepad.NotesList: void onCreate(android.os.Bundle)&gt;&gt;<br>
+					</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>3</td>
+					<td>implicit_home</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NotesList]773, ACT[com.example.android.notepad.NotesList]773, implicit_home_event, null&gt;<br>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>6</td>
+					<td>open_context_menu</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NotesList]773, INFL[android.widget.ListView,WID[16908298|list]272,773]1307, long_click, &lt;com.example.android.notepad.NotesList: void onCreateContextMenu(android.view.ContextMenu,android.view.View,android.view.ContextMenu$ContextMenuInfo)&gt;&gt;<br>
+					</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NotesList]773, ACT[com.example.android.notepad.NotesList]773, implicit_lifecycle_event, &lt;com.example.android.notepad.NotesList: void onCreateContextMenu(android.view.ContextMenu,android.view.View,android.view.ContextMenu$ContextMenuInfo)&gt;&gt;<br>
+					</td>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>3</td>
+					<td>implicit_home</td>
+					<td>
+						0: &lt;OptionsMenu[com.example.android.notepad.NotesList]757, OptionsMenu[com.example.android.notepad.NotesList]757, implicit_home_event, null&gt;<br>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>2</td>
+					<td>implicit_rotate</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.TitleEditor]752, ACT[com.example.android.notepad.TitleEditor]752, implicit_rotate_event, null&gt;<br>
+					</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.TitleEditor]752, ACT[com.example.android.notepad.TitleEditor]752, implicit_lifecycle_event, &lt;com.example.android.notepad.TitleEditor: void onPause()&gt;&gt;<br>
+						1: &lt;ACT[com.example.android.notepad.TitleEditor]752, ACT[com.example.android.notepad.TitleEditor]752, implicit_lifecycle_event, &lt;com.example.android.notepad.TitleEditor: void onCreate(android.os.Bundle)&gt;&gt;<br>
+						2: &lt;ACT[com.example.android.notepad.TitleEditor]752, ACT[com.example.android.notepad.TitleEditor]752, implicit_lifecycle_event, &lt;com.example.android.notepad.TitleEditor: void onResume()&gt;&gt;<br>
+					</td>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>5</td>
+					<td>implicit_rotate</td>
+					<td>
+						0: &lt;OptionsMenu[com.example.android.notepad.NotesList]757, OptionsMenu[com.example.android.notepad.NotesList]757, implicit_rotate_event, null&gt;<br>
+					</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NotesList]773, ACT[com.example.android.notepad.NotesList]773, implicit_lifecycle_event, &lt;com.example.android.notepad.NotesList: void onCreate(android.os.Bundle)&gt;&gt;<br>
+						1: &lt;ACT[com.example.android.notepad.NotesList]773, ACT[com.example.android.notepad.NotesList]773, implicit_lifecycle_event, &lt;com.example.android.notepad.NotesList: boolean onCreateOptionsMenu(android.view.Menu)&gt;&gt;<br>
+						2: &lt;ACT[com.example.android.notepad.NotesList]773, ACT[com.example.android.notepad.NotesList]773, implicit_lifecycle_event, &lt;com.example.android.notepad.NotesList: boolean onPrepareOptionsMenu(android.view.Menu)&gt;&gt;<br>
+					</td>
+				</tr>
+				<tr>
+					<td>6</td>
+					<td>3</td>
+					<td>implicit_power</td>
+					<td>
+						0: &lt;ContextMenu[VAR[r1]995]1299, ContextMenu[VAR[r1]995]1299, implicit_power_event, null&gt;<br>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>4</td>
+					<td>implicit_power</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_power_event, null&gt;<br>
+					</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_lifecycle_event, &lt;com.example.android.notepad.NoteEditor: void onPause()&gt;&gt;<br>
+						1: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_lifecycle_event, &lt;com.example.android.notepad.NoteEditor: void onResume()&gt;&gt;<br>
+					</td>
+				</tr>
+				<tr>
+					<td>1</td>
+					<td>1</td>
+					<td>implicit_home</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NotesLiveFolder]749, ACT[com.example.android.notepad.NotesLiveFolder]749, implicit_home_event, null&gt;<br>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>8</td>
+					<td>implicit_back</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NotesList]773, ACT[com.example.android.notepad.NotesList]773, implicit_back_event, null&gt;<br>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>5</td>
+					<td>open_options_menu</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NotesList]773, OptionsMenu[com.example.android.notepad.NotesList]757, click, &lt;com.example.android.notepad.NotesList: boolean onCreateOptionsMenu(android.view.Menu)&gt;&gt;<br>
+					</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NotesList]773, ACT[com.example.android.notepad.NotesList]773, implicit_lifecycle_event, &lt;com.example.android.notepad.NotesList: boolean onCreateOptionsMenu(android.view.Menu)&gt;&gt;<br>
+						1: &lt;ACT[com.example.android.notepad.NotesList]773, ACT[com.example.android.notepad.NotesList]773, implicit_lifecycle_event, &lt;com.example.android.notepad.NotesList: boolean onPrepareOptionsMenu(android.view.Menu)&gt;&gt;<br>
+					</td>
+				</tr>
+				<tr>
+					<td>6</td>
+					<td>3</td>
+					<td>implicit_back</td>
+					<td>
+						0: &lt;ContextMenu[VAR[r1]995]1299, ContextMenu[VAR[r1]995]1299, implicit_back_event, null&gt;<br>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>3</td>
+					<td>implicit_back</td>
+					<td>
+						0: &lt;OptionsMenu[com.example.android.notepad.NotesList]757, OptionsMenu[com.example.android.notepad.NotesList]757, implicit_back_event, null&gt;<br>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>7</td>
+					<td>open_options_menu</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NoteEditor]792, OptionsMenu[com.example.android.notepad.NoteEditor]782, click, &lt;com.example.android.notepad.NoteEditor: boolean onCreateOptionsMenu(android.view.Menu)&gt;&gt;<br>
+					</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_lifecycle_event, &lt;com.example.android.notepad.NoteEditor: boolean onCreateOptionsMenu(android.view.Menu)&gt;&gt;<br>
+						1: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_lifecycle_event, &lt;com.example.android.notepad.NoteEditor: boolean onPrepareOptionsMenu(android.view.Menu)&gt;&gt;<br>
+					</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>2</td>
+					<td>cyclic_edge</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.TitleEditor]752, INFL[android.widget.Button,WID[2131427419|ok]561,1301]1303, click, &lt;com.example.android.notepad.TitleEditor: void onClickOk(android.view.View)&gt;&gt;<br>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>2</td>
+					<td>implicit_power</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.TitleEditor]752, ACT[com.example.android.notepad.TitleEditor]752, implicit_power_event, null&gt;<br>
+					</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.TitleEditor]752, ACT[com.example.android.notepad.TitleEditor]752, implicit_lifecycle_event, &lt;com.example.android.notepad.TitleEditor: void onPause()&gt;&gt;<br>
+						1: &lt;ACT[com.example.android.notepad.TitleEditor]752, ACT[com.example.android.notepad.TitleEditor]752, implicit_lifecycle_event, &lt;com.example.android.notepad.TitleEditor: void onResume()&gt;&gt;<br>
+					</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>4</td>
+					<td>implicit_home</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_home_event, null&gt;<br>
+					</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_lifecycle_event, &lt;com.example.android.notepad.NoteEditor: void onPause()&gt;&gt;<br>
+						1: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_lifecycle_event, &lt;com.example.android.notepad.NoteEditor: void onResume()&gt;&gt;<br>
+					</td>
+				</tr>
+				<tr>
+					<td>7</td>
+					<td>7</td>
+					<td>implicit_rotate</td>
+					<td>
+						0: &lt;OptionsMenu[com.example.android.notepad.NoteEditor]782, OptionsMenu[com.example.android.notepad.NoteEditor]782, implicit_rotate_event, null&gt;<br>
+					</td>
+					<td>
+						0: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_lifecycle_event, &lt;com.example.android.notepad.NoteEditor: void onPause()&gt;&gt;<br>
+						1: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_lifecycle_event, &lt;com.example.android.notepad.NoteEditor: void onCreate(android.os.Bundle)&gt;&gt;<br>
+						2: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_lifecycle_event, &lt;com.example.android.notepad.NoteEditor: void onResume()&gt;&gt;<br>
+						3: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_lifecycle_event, &lt;com.example.android.notepad.NoteEditor: boolean onCreateOptionsMenu(android.view.Menu)&gt;&gt;<br>
+						4: &lt;ACT[com.example.android.notepad.NoteEditor]792, ACT[com.example.android.notepad.NoteEditor]792, implicit_lifecycle_event, &lt;com.example.android.notepad.NoteEditor: boolean onPrepareOptionsMenu(android.view.Menu)&gt;&gt;<br>
+					</td>
+				</tr>
+				<tr>
+					<td>6</td>
+					<td>3</td>
+					<td>close_menu</td>
+					<td>
+						0: &lt;ContextMenu[VAR[r1]995]1299, MenuItemINFL[android.view.MenuItem,WID[2131427425|context_delete]602,1299]1312, click, &lt;com.example.android.notepad.NotesList: boolean onContextItemSelected(android.view.MenuItem)&gt;&gt;<br>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>6</td>
+					<td>3</td>
+					<td>close_menu</td>
+					<td>
+						0: &lt;ContextMenu[VAR[r1]995]1299, MenuItemINFL[android.view.MenuItem,WID[2131427423|context_open]569,1299]1310, click, &lt;com.example.android.notepad.NotesList: boolean onContextItemSelected(android.view.MenuItem)&gt;&gt;<br>
+					</td>
+					<td>
+					</td>
+				</tr>
+				<tr>
+					<td>6</td>
+					<td>3</td>
+					<td>close_menu</td>
+					<td>
+						0: &lt;ContextMenu[VAR[r1]995]1299, MenuItemINFL[android.view.MenuItem,WID[2131427424|context_copy]604,1299]1311, click, &lt;com.example.android.notepad.NotesList: boolean onContextItemSelected(android.view.MenuItem)&gt;&gt;<br>
+					</td>
+					<td>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+		<hr>
+		<div class='container-fluid'>
+			<div class='header clearfix::after'>
+				<h3 class='text-muted'>Test Generator</h3>
+			</div>
+			<div class='row grpah'>
+				<div class='col-lg-6'>
+					<div id='cy_test_select' style='position: relative; height: 400px;'></div>
+				</div>
+				<div class='col-lg-6'>
+					<div id='cy_test_path' style='position: relative; height: 400px;'></div>
+				</div>
+			</div>
+		</div>
+		<button type='button' class='btn btn-primary' id='generate_test'>Generate test</button>
 	</body>
+	<script>
+	</script>
 </html>
