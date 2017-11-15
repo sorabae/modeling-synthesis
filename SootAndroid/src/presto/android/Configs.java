@@ -106,7 +106,7 @@ public class Configs {
   public static boolean allowLoop = false;
 
   // [test generation] path exploration length
-  public static int epDepth = 3;
+  public static int epDepth = 5;
 
   public static boolean sanityCheck = false;
 

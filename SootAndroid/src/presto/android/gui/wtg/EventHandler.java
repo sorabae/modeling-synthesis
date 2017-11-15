@@ -69,11 +69,11 @@ public class EventHandler {
     StringBuffer sb = new StringBuffer();
     sb.append("<");
     sb.append(window);
-    sb.append(",");
+    sb.append(", ");
     sb.append(widget);
-    sb.append(",");
+    sb.append(", ");
     sb.append(event);
-    sb.append(",");
+    sb.append(", ");
     sb.append(handler);
     sb.append(">");
     return sb.toString();

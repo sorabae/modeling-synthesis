@@ -505,12 +505,15 @@ public class ExplicitForwardEdgeBuilder implements Algorithm {
     // specify the stmts we are interested: showDialog, startActivity and
     // openMenu
     for (NObjectNode view : allViews) {
+      Logger.verb("ViewName", view.toString());
       for (HandlerBean bean : viewToHandlers.get(view)) {
         NObjectNode guiWidget = bean.getGUIWidget();
         EventType event = bean.getEvent();
         boolean avoid = true;
+        Logger.verb("Event", event.toString());
         Set<SootMethod> handlers = bean.getHandlers();
         for (SootMethod handler : handlers) {
+        Logger.verb("Handler", handler.toString());
           // we should get the real gui widget here instead of using
           // "view" because we treat "onCreateOptionsMenu" specially
           CFGAnalyzerInput input = new CFGAnalyzerInput(guiWidget, handler, Filter.openWindowStmtFilter);

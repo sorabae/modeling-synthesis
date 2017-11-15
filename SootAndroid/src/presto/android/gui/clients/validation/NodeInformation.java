@@ -1,4 +1,4 @@
-package presto.android.gui.clients.synthesis;
+package presto.android.gui.clients.validation;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -21,11 +21,13 @@ public class NodeInformation {
   private int id;
   private String type;
   private String name;
+  private String raw_name;
 
   public NodeInformation (WTGNode node) {
     id = node.getId();
     type = parseType(node);
     name = parseName(node);
+    raw_name = node.getWindow().toString();
   }
 
   private String parseType (WTGNode node) {
@@ -53,5 +55,9 @@ public class NodeInformation {
 
   public String getName () {
     return this.name;
+  }
+
+  public String getRawName () {
+    return this.raw_name;
   }
 }

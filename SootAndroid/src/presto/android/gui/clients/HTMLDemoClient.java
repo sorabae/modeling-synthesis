@@ -27,10 +27,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 import java.io.*;
 
-import presto.android.gui.clients.synthesis.NodeInformation;
+import presto.android.gui.clients.validation.NodeInformation;
 
 public class HTMLDemoClient implements GUIAnalysisClient {
   private String HTML_DIR = "/home/cce13st/dev/modeling-synthesis/WTGDebugger";
@@ -51,6 +53,9 @@ public class HTMLDemoClient implements GUIAnalysisClient {
       fw.write(drawGraph(wtg));
       fw.close();
       System.out.println("* success to write a HTML file");
+
+      WTGtoJSON(wtg);
+      System.out.println("* success to write a JSON file");
 		} catch (Exception e) {
       System.out.println("* fail to write a HTML file");
       //throw e;
@@ -85,10 +90,11 @@ public class HTMLDemoClient implements GUIAnalysisClient {
     sb.append(
     "\t\t\t]};\n" +
     "\t\t</script>\n" +
+    "\t\t<script src='testgen.js' type='text/javascript'></script>\n" +
     "\t\t<script src='core.js' type='text/javascript'></script>\n" +
     "\t</head>\n" +
     "\t<body>\n" +
-    "\t\t<div class='container'>\n" +
+    "\t\t<div class='container-fluid'>\n" +
     "\t\t\t<div class='header clearfix::after'>\n" +
     "\t\t\t\t<h3 class='text-muted'>WTG Debugger</h3>\n" +
     "\t\t\t</div>\n" +
@@ -102,7 +108,7 @@ public class HTMLDemoClient implements GUIAnalysisClient {
     "\t\t\t\t\t\t\t<button type='button' class='btn btn-primary synthesis' id='synthesis-all'>Synthesize</button>\n" +
     "\t\t\t\t\t\t</div>\n" +
     "\t\t\t\t\t</div>\n" +
-    "\t\t\t\t\t<div id='cy'></div>\n" +
+    "\t\t\t\t\t<div id='cy' style='position: relative;'></div>\n" +
     "\t\t\t\t</div>\n" +
     "\t\t\t\t<div class='col-lg-6'>\n" +
     "\t\t\t\t\t<div class='row'>\n" +
@@ -113,24 +119,18 @@ public class HTMLDemoClient implements GUIAnalysisClient {
     "\t\t\t\t\t\t\t<button type='button' class='btn btn-primary synthesis' id='synthesis-part'>Synthesize</button>\n" +
     "\t\t\t\t\t\t</div>\n" +
     "\t\t\t\t\t</div>\n" +
-    "\t\t\t\t\t<div id='cy_part'></div>\n" +
+    "\t\t\t\t\t<div id='cy_part' style='position: relative;'></div>\n" +
     "\t\t\t\t</div>\n" +
     "\t\t\t</div>\n" +
     "\t\t</div>\n");
 
-    for (WTGNode node : wtg.getNodes()) {
-      NodeInformation info = new NodeInformation(node);
-      sb.append(
-        "\t\t<div>" +
-        "\t\t\t<p>" + info.getId() + "</p>\n" +
-        "\t\t\t<p>" + info.getType() + "</p>\n" +
-        "\t\t\t<p>" + info.getName() + "</p>\n" +
-        "\t\t</div>"
-      );
-    }
-
+    // Print tables describe components of WTG
+    sb.append(getWTGTable(wtg));
+    
     sb.append(
     "\t</body>\n" +
+    "\t<script>\n" +
+    "\t</script>\n" +
     "</html>\n"
     );
 
@@ -150,5 +150,236 @@ public class HTMLDemoClient implements GUIAnalysisClient {
     return String.format("{ data: { source: %d, target: %d, content: '%s' } },\n",
       edge.getSourceNode().getId(), edge.getTargetNode().getId(), content);
 
+  }
+
+  public String getWTGTable(WTG wtg) {
+    StringBuilder sb = new StringBuilder();
+
+    sb.append(
+      "\t\t<div class='container-fluid' style='position: relative;'>\n" +
+      "\t\t\t<table class='table'>\n" +
+      "\t\t\t\t<thead>\n" +
+      "\t\t\t\t\t<tr>\n" + 
+      "\t\t\t\t\t\t<th>ID</th>\n" +
+      "\t\t\t\t\t\t<th>Type</th>\n" +
+      "\t\t\t\t\t\t<th>Name</th>\n" +
+      "\t\t\t\t\t</tr>\n" +
+      "\t\t\t\t</thead>\n" +
+      "\t\t\t\t<tbody>\n"
+      );
+  
+      ArrayList<NodeInformation> nodeList = new ArrayList<NodeInformation>();
+      NodeComparator cmp = new NodeComparator();
+  
+      for (WTGNode node : wtg.getNodes()) {
+        NodeInformation info = new NodeInformation(node);
+        nodeList.add(info);
+      }
+      nodeList.sort(cmp);
+  
+      nodeList.forEach(node -> sb.append(
+        "\t\t\t\t\t<tr>\n" +
+        "\t\t\t\t\t\t<td>" + node.getId() + "</td>\n" +
+        "\t\t\t\t\t\t<td>" + node.getType() + "</td>\n" +
+        "\t\t\t\t\t\t<td>" + node.getName() + "</td>\n" +
+        "\t\t\t\t\t</tr>\n"
+        ));
+  
+      sb.append(
+        "\t\t\t\t</tbody>\n" +
+        "\t\t\t</table>\n" +
+        "\t\t</div>"
+      );
+  
+      sb.append(
+        "\t\t<hr>\n" + 
+        "\t\t<div class='container-fluid' style='position: relative;'>\n" +
+        "\t\t<table class='table'>\n" +
+        "\t\t\t<thead>\n" +
+        "\t\t\t\t<tr>\n" + 
+        "\t\t\t\t\t<th>Source</th>\n" +
+        "\t\t\t\t\t<th>Target</th>\n" +
+        "\t\t\t\t\t<th>Root</th>\n" +
+        "\t\t\t\t\t<th>WTG Handlers</th>\n" +
+        "\t\t\t\t\t<th>Callbacks</th>\n" +
+        "\t\t\t\t</tr>\n" +
+        "\t\t\t</thead>\n" +
+        "\t\t\t<tbody>\n"
+      );
+  
+      for (WTGEdge edge : wtg.getEdges()) {
+        sb.append(
+          "\t\t\t\t<tr>\n" +
+          "\t\t\t\t\t<td>" + edge.getSourceNode().getId() + "</td>\n" +
+          "\t\t\t\t\t<td>" + edge.getTargetNode().getId() + "</td>\n" +
+          "\t\t\t\t\t<td>" + edge.getRootTag().toString() + "</td>\n"
+        );
+  
+        int count = 0;
+        sb.append(
+          "\t\t\t\t\t<td>\n"
+        );
+        for (EventHandler handler : edge.getWTGHandlers()) {
+          String handlerInfo = handler.toString();
+          handlerInfo = handlerInfo.replaceAll("<", "&lt;");
+          handlerInfo = handlerInfo.replaceAll(">", "&gt;");
+          sb.append("\t\t\t\t\t\t" + count++ + ": " + handlerInfo + "<br>\n");
+        }
+        sb.append(
+          "\t\t\t\t\t</td>\n"
+        );
+  
+        count = 0;
+        sb.append(
+          "\t\t\t\t\t<td>\n"
+        );
+        for (EventHandler callback : edge.getCallbacks()) {
+          String callbackInfo = callback.toString();
+          callbackInfo = callbackInfo.replaceAll("<", "&lt;");
+          callbackInfo = callbackInfo.replaceAll(">", "&gt;");
+          sb.append("\t\t\t\t\t\t" + count++ + ": " + callbackInfo + "<br>\n");
+        }
+        sb.append(
+          "\t\t\t\t\t</td>\n" +
+          "\t\t\t\t</tr>\n"
+        );
+      }
+  
+      sb.append(
+        "\t\t\t</tbody>\n" +
+        "\t\t</table>\n" +
+        "\t\t</div>\n"
+      );
+  
+      sb.append(
+        "\t\t<hr>\n" +
+        "\t\t<div class='container-fluid'>\n" +
+        "\t\t\t<div class='header clearfix::after'>\n" +
+        "\t\t\t\t<h3 class='text-muted'>Test Generator</h3>\n" +
+        "\t\t\t</div>\n" +
+        "\t\t\t<div class='row grpah'>\n" +
+        "\t\t\t\t<div class='col-lg-6'>\n" + 
+        "\t\t\t\t\t<div id='cy_test_select' style='position: relative; height: 400px;'></div>\n" +
+        "\t\t\t\t</div>\n" +
+        "\t\t\t\t<div class='col-lg-6'>\n" + 
+        "\t\t\t\t\t<div id='cy_test_path' style='position: relative; height: 400px;'></div>\n" +
+        "\t\t\t\t</div>\n" +
+        "\t\t\t</div>\n" +
+        "\t\t</div>\n"
+      );
+
+      sb.append(
+        "\t\t<button type='button' class='btn btn-primary' id='generate_test'>Generate test</button>\n"
+      );
+
+    return sb.toString();
+  }
+
+  public void WTGtoJSON(WTG wtg) {
+    ArrayList<NodeInformation> nodeList = new ArrayList<NodeInformation>();
+    NodeComparator cmp = new NodeComparator();
+
+    File wtgJSON;
+    FileWriter wtgWriter = null;
+    try {
+      String SEP = File.separator;
+      wtgJSON = new File(HTML_DIR + SEP + "wtg.json");
+      wtgWriter = new FileWriter(wtgJSON, false);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    for (WTGNode node : wtg.getNodes()) {
+      NodeInformation info = new NodeInformation(node);
+      nodeList.add(info);
+    }
+
+    nodeList.sort(cmp);
+
+    writeJSON(wtgWriter, "{", 0);
+    writeJSON(wtgWriter, "\"nodes\": [", 1);
+
+    for (NodeInformation nodeInfo : nodeList) {
+      writeJSON(wtgWriter, "{ \"id\": \"" + nodeInfo.getId() + "\",", 2);
+      writeJSON(wtgWriter, "  \"type\": \"" + nodeInfo.getType() + "\",", 2);
+      if (nodeInfo.getName().equals(""))
+        writeJSON(wtgWriter, "  \"name\": \"" + nodeInfo.getName() + "\"}", 2);
+      else
+        writeJSON(wtgWriter, "  \"name\": \"" + nodeInfo.getName() + "\"},", 2);
+    }
+
+    writeJSON(wtgWriter, "],", 1);
+
+    writeJSON(wtgWriter, "\"edges\": [", 1);
+
+    for (WTGEdge edge : wtg.getEdges()) {
+      writeJSON(wtgWriter, "{ \"src\": \"" + edge.getSourceNode().getId() + "\"," , 2);
+      writeJSON(wtgWriter, "\"tgt\": \"" + edge.getTargetNode().getId() + "\"," , 3);
+      writeJSON(wtgWriter, "\"tag\": \"" + edge.getRootTag() + "\",", 3);
+
+      int count = 1;
+      int len = 0;
+
+      writeJSON(wtgWriter, "\"handlers\": [", 3);
+      Set<EventHandler> handlers = edge.getWTGHandlers();
+      len = handlers.size();
+      for (EventHandler handler : handlers) {
+        if (count == len)
+          writeJSON(wtgWriter, "\"" + handler.toString() + "\"", 4);
+        else
+          writeJSON(wtgWriter, "\"" + handler.toString() + "\",", 4);
+        count++;
+      }
+      writeJSON(wtgWriter, "],", 3);
+
+      writeJSON(wtgWriter, "\"callbacks\": [", 3);
+      count = 1;
+      List<EventHandler> callbacks = edge.getCallbacks();
+      len = callbacks.size();
+      for (EventHandler callback : callbacks) {
+        if (count == len)
+          writeJSON(wtgWriter, "\"" + callback.toString() + "\"", 4);
+        else
+          writeJSON(wtgWriter, "\"" + callback.toString() + "\",", 4);
+        count++;
+      }
+      writeJSON(wtgWriter, "]},", 3);
+    }
+
+    writeJSON(wtgWriter, "],", 1);
+
+    writeJSON(wtgWriter, "}", 0);
+
+    try {
+      wtgWriter.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return;
+  }
+
+  public void writeJSON(FileWriter fw, String content, int tabs) {
+    String tabStr = "";
+    for (int i=0; i<tabs; i++)
+      tabStr += "\t";
+
+    try {
+      fw.write(tabStr + content + "\n");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  public class NodeComparator implements Comparator<NodeInformation>
+  {
+      public int compare(NodeInformation left, NodeInformation right) {
+          if (left.getId() > right.getId())
+              return 1;
+          else if (left.getId() == right.getId())
+              return 0;
+          else
+              return -1;
+      }
   }
 }
