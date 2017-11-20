@@ -18,7 +18,6 @@ import org.secuso.privacyfriendlymemory.ui.navigation.HelpActivity;
 import org.secuso.privacyfriendlymemory.ui.navigation.HighscoreActivity;
 import org.secuso.privacyfriendlymemory.ui.navigation.DeckChoiceActivity;
 import org.secuso.privacyfriendlymemory.ui.navigation.StatisticsActivity;
-import org.secuso.privacyfriendlymemory.ui.SplashActivity;
 
 public class SynthesizedProgram {
 
@@ -34,12 +33,12 @@ public class SynthesizedProgram {
     			Random random_body = new Random();
     			switch (random_body.nextInt(100)) {
     				case 0 : 
-    					// implicit_power_event
+    					// implicit_home_event
     					Windows.w_MemoActivity.onPause();
     					Windows.w_MemoActivity.onResume();
     					break;
     				defult : 
-    					// implicit_home_event
+    					// implicit_power_event
     					Windows.w_MemoActivity.onPause();
     					Windows.w_MemoActivity.onResume();
     			}
@@ -49,13 +48,13 @@ public class SynthesizedProgram {
     		Random random_body = new Random();
     		switch (random_body.nextInt(100)) {
     			case 0 : 
+    				// implicit_back_event
+    				break;
+    			defult : 
     				// implicit_rotate_event
     				Windows.w_MemoActivity.onPause();
     				Windows.w_MemoActivity.onCreate(null);
     				Windows.w_MemoActivity.onResume();
-    				break;
-    			defult : 
-    				// implicit_back_event
     		}
     		m_MemoActivity();
     }
@@ -114,18 +113,18 @@ public class SynthesizedProgram {
     		Random random_body = new Random();
     		switch (random_body.nextInt(100)) {
     			case 0 : 
-    				// implicit_power_event
-    				Windows.w_AppCompatPreferenceActivity.onStop();
-    				break;
-    			case 1 : 
     				// click
     				Windows.w_HighscoreActivity.onOptionsItemSelected(null, R.idmenu_highscore_reset);
+    				break;
+    			case 1 : 
+    				// implicit_home_event
+    				Windows.w_AppCompatPreferenceActivity.onStop();
     				break;
     			case 2 : 
     				// implicit_back_event
     				break;
     			defult : 
-    				// implicit_home_event
+    				// implicit_power_event
     				Windows.w_AppCompatPreferenceActivity.onStop();
     		}
     		m_HighscoreActivity();
@@ -151,13 +150,13 @@ public class SynthesizedProgram {
     				Windows.w_StatisticsActivity.onOptionsItemSelected(null, R.idmenu_statistics_reset);
     				break;
     			case 1 : 
-    				// implicit_back_event
-    				break;
-    			case 2 : 
     				// implicit_home_event
     				break;
-    			defult : 
+    			case 2 : 
     				// implicit_power_event
+    				break;
+    			defult : 
+    				// implicit_back_event
     		}
     		m_StatisticsActivity();
     }
@@ -176,14 +175,14 @@ public class SynthesizedProgram {
     			Random random_body = new Random();
     			switch (random_body.nextInt(100)) {
     				case 0 : 
-    					// implicit_power_event
-    					Windows.w_AppCompatPreferenceActivity.onStop();
-    					break;
-    				case 1 : 
     					// implicit_rotate_event
     					Windows.w_AppCompatPreferenceActivity.onStop();
     					Windows.w_AppCompatPreferenceActivity.onDestroy();
     					Windows.w_HelpActivity.onCreate(null);
+    					break;
+    				case 1 : 
+    					// implicit_power_event
+    					Windows.w_AppCompatPreferenceActivity.onStop();
     					break;
     				defult : 
     					// implicit_home_event
@@ -229,18 +228,18 @@ public class SynthesizedProgram {
     			Random random_body = new Random();
     			switch (random_body.nextInt(100)) {
     				case 0 : 
-    					// implicit_home_event
+    					// implicit_rotate_event
     					Windows.w_AppCompatPreferenceActivity.onStop();
+    					Windows.w_AppCompatPreferenceActivity.onDestroy();
+    					Windows.w_DeckChoiceActivity.onCreate(null);
     					break;
     				case 1 : 
     					// implicit_power_event
     					Windows.w_AppCompatPreferenceActivity.onStop();
     					break;
     				defult : 
-    					// implicit_rotate_event
+    					// implicit_home_event
     					Windows.w_AppCompatPreferenceActivity.onStop();
-    					Windows.w_AppCompatPreferenceActivity.onDestroy();
-    					Windows.w_DeckChoiceActivity.onCreate(null);
     			}
     		}
   }
@@ -261,11 +260,11 @@ public class SynthesizedProgram {
     					// implicit_home_event
     					break;
     				case 1 : 
-    					// implicit_rotate_event
-    					Windows.w_SplashActivity.onCreate(null);
+    					// implicit_power_event
     					break;
     				defult : 
-    					// implicit_power_event
+    					// implicit_rotate_event
+    					Windows.w_SplashActivity.onCreate(null);
     			}
     		}
     }
@@ -285,14 +284,14 @@ public class SynthesizedProgram {
     			Random random_body = new Random();
     			switch (random_body.nextInt(100)) {
     				case 0 : 
-    					// implicit_home_event
-    					break;
-    				case 1 : 
     					// implicit_rotate_event
     					Windows.w_StatisticsActivity.onCreate(null);
     					break;
-    				defult : 
+    				case 1 : 
     					// implicit_power_event
+    					break;
+    				defult : 
+    					// implicit_home_event
     			}
     		}
     }
@@ -306,19 +305,19 @@ public class SynthesizedProgram {
     		switch (random_body.nextInt(100)) {
     			case 0 : 
     				// click
-    				Windows.w_MainActivity.onClick(null, R.idarrow_left);
+    				Windows.w_MainActivity.onClick(null, R.idplayButton);
     				Windows.w_MemoActivity.onCreate(null);
     				Windows.w_MemoActivity.onResume();
     				break;
     			case 1 : 
     				// click
-    				Windows.w_MainActivity.onClick(null, R.idplayButton);
+    				Windows.w_MainActivity.onClick(null, R.idarrow_right);
     				Windows.w_MemoActivity.onCreate(null);
     				Windows.w_MemoActivity.onResume();
     				break;
     			defult : 
     				// click
-    				Windows.w_MainActivity.onClick(null, R.idarrow_right);
+    				Windows.w_MainActivity.onClick(null, R.idarrow_left);
     				Windows.w_MemoActivity.onCreate(null);
     				Windows.w_MemoActivity.onResume();
     		}
@@ -331,22 +330,22 @@ public class SynthesizedProgram {
     			switch (random_body.nextInt(100)) {
     				case 0 : 
     					// click
-    					Windows.w_MainActivity.onClick(null, R.idarrow_right);
+    					Windows.w_MainActivity.onClick(null, R.idplayButton);
     					break;
     				case 1 : 
     					// click
-    					Windows.w_MainActivity.onClick(null, R.idplayButton);
+    					Windows.w_MainActivity.onClick(null, R.idarrow_right);
     					break;
     				case 2 : 
     					// click
     					Windows.w_MainActivity.onClick(null, R.idarrow_left);
     					break;
     				case 3 : 
-    					// implicit_rotate_event
-    					Windows.w_MainActivity.onCreate(null);
+    					// implicit_power_event
     					break;
     				case 4 : 
-    					// implicit_power_event
+    					// implicit_rotate_event
+    					Windows.w_MainActivity.onCreate(null);
     					break;
     				defult : 
     					// implicit_home_event
@@ -378,9 +377,8 @@ public class SynthesizedProgram {
     					Windows.w_MemoActivity.onItemClick(null, null, new Random().nextInt(100), null);
     					break;
     				case 1 : 
-    					// implicit_rotate_event
+    					// implicit_home_event
     					Windows.w_MemoActivity.onPause();
-    					Windows.w_MemoActivity.onCreate(null);
     					Windows.w_MemoActivity.onResume();
     					break;
     				case 2 : 
@@ -389,8 +387,9 @@ public class SynthesizedProgram {
     					Windows.w_MemoActivity.onResume();
     					break;
     				defult : 
-    					// implicit_home_event
+    					// implicit_rotate_event
     					Windows.w_MemoActivity.onPause();
+    					Windows.w_MemoActivity.onCreate(null);
     					Windows.w_MemoActivity.onResume();
     			}
     		}
@@ -414,11 +413,11 @@ public class SynthesizedProgram {
     			Random random_body = new Random();
     			switch (random_body.nextInt(100)) {
     				case 0 : 
-    					// implicit_home_event
-    					break;
-    				case 1 : 
     					// implicit_rotate_event
     					Windows.w_AboutActivity.onCreate(null);
+    					break;
+    				case 1 : 
+    					// implicit_home_event
     					break;
     				defult : 
     					// implicit_power_event
