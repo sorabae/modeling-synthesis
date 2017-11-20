@@ -222,7 +222,7 @@ public class RoboSynthesizer {
     WTGEdge tmp = edges.get(0);
     if (tmp.getTargetNode() == tmp.getSourceNode()) {
       testCase.append("\t\tRandom random_branch = new Random();");
-      testCase.append("\t\twhile (random_branch.nextInt) {");
+      testCase.append("\t\twhile (random_branch.nextInt(100)) {");
       synthesizeBody(testCase, edges, "\t\t\t");
       testCase.append("\t\t}");
     } else {
@@ -351,9 +351,7 @@ public class RoboSynthesizer {
         switch (mth) {
           case "onCreate": arg = null; break;
           case "onCreateOptionsMenu":
-          // TODO:
-          // - w_Menu should be added to the necessary objects
-          arg = "w_" + resolveName(edge.getTargetNode()); break;
+            arg = "w_" + resolveName(edge.getTargetNode()); break;
           default: arg = ""; break;
         }
 
