@@ -126,10 +126,10 @@ public class HTMLDemoClient implements GUIAnalysisClient {
 
   public String drawEdge(WTGEdge edge) {
     EventType et = edge.getEventType();
+    // TODO: for now, do not consider implicit events for simplicity
+    if (et.isImplicit()) return "";
+
     String content = et.toString();
-    // if (!et.isImplicit()) {
-    //   content = String.format("%s, ", edge.getGUIWidget()) + content;
-    // }
     return String.format("{ data: { source: %d, target: %d, content: '%s' } },\n",
       edge.getSourceNode().getId(), edge.getTargetNode().getId(), content);
 

@@ -30,9 +30,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-// import presto.android.gui.clients.testgen.HelperDepot;
-// import presto.android.gui.clients.testgen.Path;
-// import presto.android.gui.clients.testgen.Robo;
 import presto.android.gui.clients.synthesis.HelperDepot;
 import presto.android.gui.clients.synthesis.Path;
 import presto.android.gui.clients.synthesis.RoboSynthesizer;
@@ -120,6 +117,9 @@ public class ProgramSynthesisClient implements GUIAnalysisClient {
     // sort into those having the same target node
     HashMap<WTGNode, List<WTGEdge>> edges = new HashMap();
     for (WTGEdge edge : source.getOutEdges()) {
+      // TODO: for now, do not consider implicit events for simplicity
+      if (edge.getEventType().isImplicit()) continue;
+      
       WTGNode key = edge.getTargetNode();
       List<WTGEdge> value = edges.get(key);
       if (value == null) {
