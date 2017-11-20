@@ -177,7 +177,7 @@ public class RoboSynthesizer {
    * Use existing Robotium code to synthesize program
    * representing event modeling
    */
-  public TestCase synthesizeProgram(WTGNode source, HashMap<WTGNode, List<WTGEdge>> edges, List<SootClass> nodes) {
+  public TestCase synthesizeProgram(WTGNode source, HashMap<WTGNode, List<WTGEdge>> edges, List<WTGNode> nodes) {
     TestCase newTestCase = newTestCase(source);
 
     nodes.forEach(node -> newTestCase.addHelperObject(node));
@@ -227,7 +227,7 @@ public class RoboSynthesizer {
       testCase.append("\t\t}");
     } else {
       synthesizeBody(testCase, edges, "\t\t");
-      testCase.append("\t\tm_" + tmp.getTargetNode().getWindow().getClassType().getShortName() + "();");
+      testCase.append("\t\tm_" + resolveName(tmp.getTargetNode()) + "();");
     }
   }
 
@@ -303,8 +303,9 @@ public class RoboSynthesizer {
         }
 
         // find the class of the wrapper/method, so that we can call them explicitly
-        testCase.addHelperObject(handler.getDeclaringClass());
-        String cls = trimInnerClass(handler.getDeclaringClass().getShortName());
+        testCase.addHelperObject(handler.getDeclaringClass(), edge.getSourceNode());
+        // String cls = trimInnerClass(handler.getDeclaringClass().getShortName());
+        String cls = trimInnerClass(resolveName(handler.getDeclaringClass(), edge.getSourceNode()));
         String obj = "Windows.w_" + cls;
 
         // synthesize arguments
@@ -337,8 +338,8 @@ public class RoboSynthesizer {
       for (EventHandler callback : callbacks) {
         SootMethod method = callback.getEventHandler();
 
-        testCase.addHelperObject(method.getDeclaringClass());
-        String cls = method.getDeclaringClass().getShortName();
+        testCase.addHelperObject(method.getDeclaringClass(), edge.getSourceNode());
+        String cls = resolveName(method.getDeclaringClass(), edge.getSourceNode());
         if (cls.contains("$")) {
           String innerCls = cls.substring(cls.indexOf("$"));
           cls = cls.substring(0, cls.indexOf("$")) + ".$instance_" + innerCls;
@@ -351,9 +352,8 @@ public class RoboSynthesizer {
           case "onCreate": arg = null; break;
           case "onCreateOptionsMenu":
           // TODO:
-          // - What if different menus exist?
           // - w_Menu should be added to the necessary objects
-          arg = "w_Menu"; break;
+          arg = "w_" + resolveName(edge.getTargetNode()); break;
           default: arg = ""; break;
         }
 
@@ -440,6 +440,26 @@ public class RoboSynthesizer {
     return classname.substring(0, index);
   }
 
+  public String resolveName(WTGNode node) {
+    String name = node.getWindow().getClassType().getShortName();
+    if (name.equals("Menu")) {
+      String fullname = node.toString();
+      fullname = fullname.substring(fullname.indexOf('[') + 1, fullname.indexOf(']'));
+      name = name + "_" + fullname.substring(fullname.lastIndexOf('.') + 1);
+    }
+    return name;
+  }
+
+  public String resolveName(SootClass cls, WTGNode source) {
+    String name = cls.getShortName();
+    if (name.equals("Menu")) {
+      String fullname = source.toString();
+      fullname = fullname.substring(fullname.indexOf('[') + 1, fullname.indexOf(']'));
+      name = name + "_" + fullname.substring(fullname.lastIndexOf('.') + 1);
+    }
+    return name;
+  }
+
   /**
    * Test case class
    */
@@ -500,10 +520,18 @@ public class RoboSynthesizer {
      *
      * @param hobj the helper object
      */
-    public void addHelperObject(SootClass hobj) {
-      String name = trimInnerClass(hobj.getName());
+     public void addHelperObject(WTGNode node) {
+       SootClass helper = node.getWindow().getClassType();
+       addImport(trimInnerClass(helper.getName()));
+
+       helperObjects.add(resolveName(node));
+     }
+
+    public void addHelperObject(SootClass helper, WTGNode source) {
+      String name = trimInnerClass(helper.getName());
       addImport(name);
-      helperObjects.add(name.substring(name.lastIndexOf('.') + 1));
+      helperObjects.add(resolveName(helper, source));
+      // helperObjects.add(name.substring(name.lastIndexOf('.') + 1));
     }
 
     /**
@@ -536,7 +564,8 @@ public class RoboSynthesizer {
     }
 
     public String toCode() {
-      String res = "public void m_" + source.getWindow().getClassType().getShortName() + "() throws Exception {\n";
+      String name = resolveName(source);
+      String res = "public void m_" + name + "() throws Exception {\n";
       for (int i = 0; i < body.size(); ++i) {
         res += "  " + body.get(i) + "\n";
       }

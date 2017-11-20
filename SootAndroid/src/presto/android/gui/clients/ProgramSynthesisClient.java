@@ -119,7 +119,7 @@ public class ProgramSynthesisClient implements GUIAnalysisClient {
     for (WTGEdge edge : source.getOutEdges()) {
       // TODO: for now, do not consider implicit events for simplicity
       if (edge.getEventType().isImplicit()) continue;
-      
+
       WTGNode key = edge.getTargetNode();
       List<WTGEdge> value = edges.get(key);
       if (value == null) {
@@ -135,11 +135,12 @@ public class ProgramSynthesisClient implements GUIAnalysisClient {
     if (!nodes.contains(source)) {
       nodes.add(source);
     }
-    List<SootClass> windows = nodes.stream().map(node -> node.getWindow().getClassType()).collect(Collectors.toList());
+    //List<SootClass> windows = nodes.stream().map(node -> node.getWindow().getClassType()).collect(Collectors.toList());
 
     System.out.println("Synthesize a node (id: " + source.getId() + ", name: " + source.getWindow().getClassType().getShortName() + ")");
+    System.out.println("Source " + source.getWindow().getClassType().getName());
     // start synthesis
-    robo.synthesizeProgram(source, edges, windows);
+    robo.synthesizeProgram(source, edges, nodes);
   }
 
   /**
