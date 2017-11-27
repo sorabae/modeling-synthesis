@@ -13,7 +13,7 @@ import soot.SootClass;
 import java.io.*;
 
 public class TestGenerator {
-  private String HTML_DIR = "/home/cce13st/dev/modeling-synthesis/WTGDebugger";
+  private String HTML_DIR = "/Users/cce13/dev/modeling-synthesis/WTGDebugger";
   
   public static void main(String[] args) {
   }
