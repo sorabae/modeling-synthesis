@@ -1,2 +1,6 @@
 
 AndroidBench/ExampleRobotium/
+
+*.pyc
+
+*.json
