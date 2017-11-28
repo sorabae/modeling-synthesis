@@ -1,2 +1,4 @@
 
 AndroidBench/ExampleRobotium/
+
+*.pyc
