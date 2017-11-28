@@ -5,6 +5,7 @@
 	<classpathentry exported="true" kind="lib" path="lib/guava-14.0.1.jar" sourcepath="guava-14.0.1-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="deps/android-17-stubs.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/velocity-1.7-dep.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/gson-2.8.2.jar"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="lib" path="lib/junit-4.12.jar"/>
 	<classpathentry kind="output" path="bin"/>
