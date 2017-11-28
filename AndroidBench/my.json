@@ -1,0 +1,12 @@
+{
+	"BASE_DIR"		: "/Users/cce13/dev/modeling-synthesis/AndroidBench",
+	"BASE_PARAM"	: "",
+	"BASE_CLIENT"	: "HTMLDemoClient",
+	"BASE_CLIENT_PARAM"	: "",
+
+	"robo"	: {
+		"relative-path" : "ExampleRobotium",
+		"abs-path"	: "",
+		"api-level"	: "android-17"
+	}
+}
