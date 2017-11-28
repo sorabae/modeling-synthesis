@@ -32,6 +32,15 @@ import java.io.*;
 import java.util.List;
 import java.util.Set;
 
+import presto.android.gui.graph.*;
+import soot.SootClass;
+
+import com.google.gson.Gson;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 /**
  * Test case generation client.
  */
@@ -43,48 +52,69 @@ public class TestGenerationClient implements GUIAnalysisClient {
   @Override
   public void run(GUIAnalysisOutput guiOutput) {
     // set start time if only wtg analysis is counted
-    if (!Configs.trackWholeExec) {
-      Logger.verb(getClass().getSimpleName(), "Pre-running time " + Debug.v().getExecutionTime());
-      Debug.v().setStartTime();
-    }
-    this.guiOutput = guiOutput;
-    // construct the WTGBuilder, used to build WTG
-    WTGBuilder wtgBuilder = new WTGBuilder();
-    wtgBuilder.build(guiOutput);
-    // build WTGAnalysisOutput, which provides access to WTG and other related functionalities
-    WTGAnalysisOutput wtgOutput = new WTGAnalysisOutput(this.guiOutput, wtgBuilder);
+    // if (!Configs.trackWholeExec) {
+    //   Logger.verb(getClass().getSimpleName(), "Pre-running time " + Debug.v().getExecutionTime());
+    //   Debug.v().setStartTime();
+    // }
+    // this.guiOutput = guiOutput;
+    // // construct the WTGBuilder, used to build WTG
+    // WTGBuilder wtgBuilder = new WTGBuilder();
+    // wtgBuilder.build(guiOutput);
+    // // build WTGAnalysisOutput, which provides access to WTG and other related functionalities
+    // WTGAnalysisOutput wtgOutput = new WTGAnalysisOutput(this.guiOutput, wtgBuilder);
     
     // sample code retrieving and using the WTG
-    traverseWtgExample(wtgOutput);
+    // traverseWtgExample(wtgOutput);
 
     // print the numbers of paths for Table IV in the ASE'15 paper
-    doPathExploration(wtgOutput);
+    // doPathExploration(wtgOutput);
 
-    // generate test cases, as described in section IV of the ASE'15 paper
-    if (Configs.genTestCase) {
-      generateTestCases(wtgOutput);
-    }
+    // Generate test cases
+    // generateTestCases(wtgOutput);
+
+    System.out.println(guiOutput);
 
     // Flow of test generation
     // 1. Load selected subgraph of WTG from JSON file
     WTG wtg = new WTG();
-    String fileDir = "/home/cce13st/dev/modeling-synthesis/WTGDebugger";
+    String fileDir = "/Users/cce13/dev/modeling-synthesis/WTGDebugger";
 
     try {
       String SEP = File.separator;
-      File inputJSON = new File(fileDir + SEP + "selected.json");
-      BufferedReader br = new BufferedReader(new FileReader(inputJSON));
+      FileReader reader = new FileReader(fileDir + SEP + "selected.json");
 
       String line;
-      while((line = br.readLine()) != null) {
+
+      JSONParser jsonParser = new JSONParser();
+      JSONObject jsonObj = (JSONObject) jsonParser.parse(reader);
+
+      JSONArray nodes = (JSONArray) jsonObj.get("nodes");
+
+      for (int i=0; i<nodes.size(); i++) {
+        JSONObject jsonNode = (JSONObject) nodes.get(i);
+        System.out.println(jsonNode);
+        String classname = (String) jsonNode.get("classname");
+        System.out.println(classname);
+        String pkg = "presto.android.gui.graph.";
+
+        if (classname.equals(pkg + "NActivityNode")) {
+          SootClass fakeClass = new SootClass(classname);
+          NActivityNode newNode = new NActivityNode();
+          newNode.c = fakeClass;
+          System.out.println(wtg.addNode(newNode));
+        }
+      }
+
+      System.out.println(wtg.getNodes());
+
         // 1. Add launcher node
         // 2. Add nodes: WTG.addNode(NObjectNode objNode)
         // 3. Add edges: WTG.addEdge(WTGEdge newEdge)
-      }
     } catch (Exception e) {
       e.printStackTrace();
     }
     // 2. Construct pseudo-WTG
+
     // 3. Traverse the pseudo-WTG and generate test
   }
 
@@ -169,6 +199,10 @@ public class TestGenerationClient implements GUIAnalysisClient {
     Velocity.init();
     VelocityContext context = new VelocityContext();
     SootClass mainActivityClass = guiOutput.getMainActivity();
+
+    // String packageName = guiOutput.getAppPackageName();
+    // String mainActivityName = guiOutput.getShortName();
+
     context.put("package", guiOutput.getAppPackageName());
     context.put("activity", mainActivityClass.getShortName());
     if (8 > Configs.getAndroidAPILevel()) {

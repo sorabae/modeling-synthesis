@@ -32,10 +32,14 @@ import java.util.Comparator;
 
 import java.io.*;
 
-import presto.android.gui.clients.validation.NodeInformation;
+import com.google.gson.Gson;
+import com.google.gson.stream.JsonWriter;
+
+import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 
 public class HTMLDemoClient implements GUIAnalysisClient {
-  private String HTML_DIR = "/home/cce13st/dev/modeling-synthesis/WTGDebugger";
+  private String HTML_DIR = "/Users/cce13/dev/modeling-synthesis/WTGDebugger";
 
   @Override
   public void run(GUIAnalysisOutput output) {
@@ -60,6 +64,20 @@ public class HTMLDemoClient implements GUIAnalysisClient {
       System.out.println("* fail to write a HTML file");
       //throw e;
     }
+
+    for (WTGNode node : wtg.getNodes()) {
+      System.out.print("[WTGNode] window: ");
+      System.out.println(node.getWindow());
+      System.out.print("          type:   ");
+      System.out.println(node.getWindow().getClass().getName());
+    }
+
+    Velocity.init();
+    VelocityContext context = new VelocityContext();
+
+    Gson gson = new Gson();
+    System.out.println(gson.toJson(context));
+    System.out.println("context printed");
   }
 
   public String drawGraph(WTG wtg) {
@@ -168,20 +186,19 @@ public class HTMLDemoClient implements GUIAnalysisClient {
       "\t\t\t\t<tbody>\n"
       );
   
-      ArrayList<NodeInformation> nodeList = new ArrayList<NodeInformation>();
+      ArrayList<WTGNode> nodeList = new ArrayList<WTGNode>();
       NodeComparator cmp = new NodeComparator();
   
       for (WTGNode node : wtg.getNodes()) {
-        NodeInformation info = new NodeInformation(node);
-        nodeList.add(info);
+        nodeList.add(node);
       }
       nodeList.sort(cmp);
   
       nodeList.forEach(node -> sb.append(
         "\t\t\t\t\t<tr>\n" +
         "\t\t\t\t\t\t<td>" + node.getId() + "</td>\n" +
-        "\t\t\t\t\t\t<td>" + node.getType() + "</td>\n" +
-        "\t\t\t\t\t\t<td>" + node.getName() + "</td>\n" +
+        "\t\t\t\t\t\t<td>" + parseType(node) + "</td>\n" +
+        "\t\t\t\t\t\t<td>" + parseName(node) + "</td>\n" +
         "\t\t\t\t\t</tr>\n"
         ));
   
@@ -257,12 +274,12 @@ public class HTMLDemoClient implements GUIAnalysisClient {
         "\t\t\t<div class='header clearfix::after'>\n" +
         "\t\t\t\t<h3 class='text-muted'>Test Generator</h3>\n" +
         "\t\t\t</div>\n" +
-        "\t\t\t<div class='row grpah'>\n" +
-        "\t\t\t\t<div class='col-lg-6'>\n" + 
-        "\t\t\t\t\t<div id='cy_test_select' style='position: relative; height: 400px;'></div>\n" +
+        "\t\t\t<div class='row graph'>\n" +
+        "\t\t\t\t<div class='col-lg-6' style='padding-bottom: 1rem;'>\n" + 
+        "\t\t\t\t\t<div id='cy_test_select' style='position: relative; height: 400px; outline: red; outline-style: auto;'></div>\n" +
         "\t\t\t\t</div>\n" +
         "\t\t\t\t<div class='col-lg-6'>\n" + 
-        "\t\t\t\t\t<div id='cy_test_path' style='position: relative; height: 400px;'></div>\n" +
+        "\t\t\t\t\t<div id='cy_test_path' style='position: relative; height: 400px; outline: blue; outline-style: auto;'></div>\n" +
         "\t\t\t\t</div>\n" +
         "\t\t\t</div>\n" +
         "\t\t</div>\n"
@@ -276,7 +293,7 @@ public class HTMLDemoClient implements GUIAnalysisClient {
   }
 
   public void WTGtoJSON(WTG wtg) {
-    ArrayList<NodeInformation> nodeList = new ArrayList<NodeInformation>();
+    ArrayList<WTGNode> nodeList = new ArrayList<WTGNode>();
     NodeComparator cmp = new NodeComparator();
 
     File wtgJSON;
@@ -289,23 +306,22 @@ public class HTMLDemoClient implements GUIAnalysisClient {
       e.printStackTrace();
     }
 
-    for (WTGNode node : wtg.getNodes()) {
-      NodeInformation info = new NodeInformation(node);
-      nodeList.add(info);
-    }
+    for (WTGNode node : wtg.getNodes())
+      nodeList.add(node);
 
     nodeList.sort(cmp);
 
     writeJSON(wtgWriter, "{", 0);
     writeJSON(wtgWriter, "\"nodes\": [", 1);
 
-    for (NodeInformation nodeInfo : nodeList) {
-      writeJSON(wtgWriter, "{ \"id\": \"" + nodeInfo.getId() + "\",", 2);
-      writeJSON(wtgWriter, "  \"type\": \"" + nodeInfo.getType() + "\",", 2);
-      if (nodeInfo.getName().equals(""))
-        writeJSON(wtgWriter, "  \"name\": \"" + nodeInfo.getName() + "\"}", 2);
+    for (WTGNode node : nodeList) {
+      writeJSON(wtgWriter, "{ \"id\": \"" + node.getId() + "\",", 2);
+      writeJSON(wtgWriter, "  \"type\": \"" + parseType(node) + "\",", 2);
+      writeJSON(wtgWriter, "  \"classname\": \"" + node.getWindow().getClass().getName() + "\",", 2);
+      if (parseType(node).equals(""))
+        writeJSON(wtgWriter, "  \"name\": \"" + parseName(node) + "\"}", 2);
       else
-        writeJSON(wtgWriter, "  \"name\": \"" + nodeInfo.getName() + "\"},", 2);
+        writeJSON(wtgWriter, "  \"name\": \"" + parseName(node) + "\"},", 2);
     }
 
     writeJSON(wtgWriter, "],", 1);
@@ -371,9 +387,17 @@ public class HTMLDemoClient implements GUIAnalysisClient {
     }
   }
 
-  public class NodeComparator implements Comparator<NodeInformation>
+  public String parseName(WTGNode node) {
+    return node.getWindow().toString().replaceAll("\\[.*", "");
+  }
+  
+  public String parseType(WTGNode node) {
+    return node.getWindow().toString().replaceAll(".*\\[", "").replaceAll("\\].*", "");
+  }
+
+  public class NodeComparator implements Comparator<WTGNode>
   {
-      public int compare(NodeInformation left, NodeInformation right) {
+      public int compare(WTGNode left, WTGNode right) {
           if (left.getId() > right.getId())
               return 1;
           else if (left.getId() == right.getId())

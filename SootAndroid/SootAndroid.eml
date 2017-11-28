@@ -20,4 +20,7 @@
 	<lib name="junit-4.12.jar" scope="COMPILE">
 		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/junit-4.12.jar!/"/>
 	</lib>
+	<lib name="gson-2.8.2.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/gson-2.8.2.jar!/"/>
+	</lib>
 </component>

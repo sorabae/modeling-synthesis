@@ -14,8 +14,14 @@ $(function () {
     for (var i=0; i<edges.length; i++) {
       console.log(edges[i].data());
     }
+
+    writeJSON('selected.json', nodes, edges);
   });
 
-  function writeJSON (filename) {
+  function writeJSON (filename, nodes, edges) {
+    // var file = new File([], filename);
+
+    // nodes.forEach((node) => { file.write(JSON.stringify(node.id)); });
+    // file.close();
   }
 });
