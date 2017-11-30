@@ -133,9 +133,14 @@ public class CallbackSequenceBuilder implements Algorithm  {
       Logger.err(getClass().getSimpleName(), "should only push 1 or 2 windows");
     }
     interimTarget = wtg.getNode(pushWindows.get(0));
+
+    if (interimTarget == null)
+      return newEdges;
+      
     if (pushWindows.size() == 2) {
       finalTarget = wtg.getNode(pushWindows.get(pushWindows.size()-1));
     }
+
     if (interimTarget.getWindow() instanceof NActivityNode) {
       if (source.getWindow() instanceof NActivityNode) {
         if (finalTarget == null) {

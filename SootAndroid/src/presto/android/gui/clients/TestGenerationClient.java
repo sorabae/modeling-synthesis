@@ -26,14 +26,15 @@ import presto.android.gui.wtg.WTGBuilder;
 import presto.android.gui.wtg.ds.WTG;
 import presto.android.gui.wtg.ds.WTGEdge;
 import presto.android.gui.wtg.ds.WTGNode;
+import presto.android.gui.wtg.flowgraph.NLauncherNode;
 import soot.SootClass;
 
 import java.io.*;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Set;
 
 import presto.android.gui.graph.*;
-import soot.SootClass;
 
 import com.google.gson.Gson;
 
@@ -51,33 +52,16 @@ public class TestGenerationClient implements GUIAnalysisClient {
 
   @Override
   public void run(GUIAnalysisOutput guiOutput) {
-    // set start time if only wtg analysis is counted
-    // if (!Configs.trackWholeExec) {
-    //   Logger.verb(getClass().getSimpleName(), "Pre-running time " + Debug.v().getExecutionTime());
-    //   Debug.v().setStartTime();
-    // }
-    // this.guiOutput = guiOutput;
-    // // construct the WTGBuilder, used to build WTG
-    // WTGBuilder wtgBuilder = new WTGBuilder();
-    // wtgBuilder.build(guiOutput);
-    // // build WTGAnalysisOutput, which provides access to WTG and other related functionalities
-    // WTGAnalysisOutput wtgOutput = new WTGAnalysisOutput(this.guiOutput, wtgBuilder);
-    
-    // sample code retrieving and using the WTG
-    // traverseWtgExample(wtgOutput);
-
-    // print the numbers of paths for Table IV in the ASE'15 paper
-    // doPathExploration(wtgOutput);
-
-    // Generate test cases
-    // generateTestCases(wtgOutput);
-
-    System.out.println(guiOutput);
+    if (!Configs.trackWholeExec) {
+      Logger.verb(getClass().getSimpleName(), "Pre-running time " + Debug.v().getExecutionTime());
+      Debug.v().setStartTime();
+    }
+    this.guiOutput = guiOutput;
 
     // Flow of test generation
     // 1. Load selected subgraph of WTG from JSON file
-    WTG wtg = new WTG();
     String fileDir = "/Users/cce13/dev/modeling-synthesis/WTGDebugger";
+    List<WTGNode> selectedNodes = new ArrayList<WTGNode>();
 
     try {
       String SEP = File.separator;
@@ -92,30 +76,49 @@ public class TestGenerationClient implements GUIAnalysisClient {
 
       for (int i=0; i<nodes.size(); i++) {
         JSONObject jsonNode = (JSONObject) nodes.get(i);
-        System.out.println(jsonNode);
+        String type = (String) jsonNode.get("type");
         String classname = (String) jsonNode.get("classname");
-        System.out.println(classname);
         String pkg = "presto.android.gui.graph.";
 
         if (classname.equals(pkg + "NActivityNode")) {
           SootClass fakeClass = new SootClass(classname);
           NActivityNode newNode = new NActivityNode();
           newNode.c = fakeClass;
-          System.out.println(wtg.addNode(newNode));
+          selectedNodes.add(new WTGNode(newNode));
+        }
+        else if (classname.equals(pkg + "NOptionsMenuNode")) {
+          SootClass fakeClass = new SootClass(classname);
+          NOptionsMenuNode newNode = new NOptionsMenuNode();
+          newNode.ownerActivity = fakeClass;
+          selectedNodes.add(new WTGNode(newNode));
+        }
+        else if (classname.equals(pkg + "NContextMenuNode")) {
+          SootClass fakeClass = new SootClass(classname);
+          NContextMenuNode newNode = new NContextMenuNode();
+          selectedNodes.add(new WTGNode(newNode));
+        }
+        else if (classname.equals(pkg + "NLauncherNode")) {
+          SootClass fakeClass = new SootClass(classname);
+          NLauncherNode newNode = new NLauncherNode();
+          selectedNodes.add(new WTGNode(newNode));
         }
       }
-
-      System.out.println(wtg.getNodes());
-
-        // 1. Add launcher node
-        // 2. Add nodes: WTG.addNode(NObjectNode objNode)
-        // 3. Add edges: WTG.addEdge(WTGEdge newEdge)
     } catch (Exception e) {
       e.printStackTrace();
     }
-    // 2. Construct pseudo-WTG
 
-    // 3. Traverse the pseudo-WTG and generate test
+    for (WTGNode node : selectedNodes) {
+      System.out.println(node);
+    }
+
+    // construct the WTGBuilder, used to build WTG
+    WTGBuilder wtgBuilder = new WTGBuilder();
+    wtgBuilder.build(guiOutput, selectedNodes);
+    // build WTGAnalysisOutput, which provides access to WTG and other related functionalities
+    WTGAnalysisOutput wtgOutput = new WTGAnalysisOutput(this.guiOutput, wtgBuilder);
+    
+    // Generate test cases
+    generateTestCases(wtgOutput);
   }
 
   /**
@@ -223,7 +226,7 @@ public class TestGenerationClient implements GUIAnalysisClient {
                                                      VelocityContext context, int k) {
     Logger.verb(getClass().getSimpleName(), "-----lengthKFeasiblePathTestCases-----");
     WTG wtg = wtgOutput.getWTG();
-    List<List<WTGEdge>> smart = wtgOutput.exploreRealPaths(wtg.getLauncherNode(), k, true, Configs.allowLoop);
+    List<List<WTGEdge>> smart = wtgOutput.explorePaths(wtg.getLauncherNode(), k, true, Configs.allowLoop);
     Robo robo = new Robo(guiOutput.getAppPackageName());
     for (List<WTGEdge> path : smart) {
       robo.generateTestCase(new Path(path));

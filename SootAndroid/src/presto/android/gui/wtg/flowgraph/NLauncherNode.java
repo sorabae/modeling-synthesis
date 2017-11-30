@@ -15,7 +15,7 @@ public class NLauncherNode extends NSpecialNode {
 
   SootClass fakeClass;
 
-  private NLauncherNode() {
+  public NLauncherNode() {
     fakeClass = new SootClass("presto.android.gui.stubs.PrestoFakeLauncherNodeClass");
     Scene.v().addClass(fakeClass);
   }

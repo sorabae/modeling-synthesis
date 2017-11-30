@@ -35,6 +35,13 @@ import java.io.*;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonWriter;
 
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import presto.android.gui.graph.*;
+import soot.SootClass;
+
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 
@@ -43,9 +50,54 @@ public class HTMLDemoClient implements GUIAnalysisClient {
 
   @Override
   public void run(GUIAnalysisOutput output) {
+
+    // Flow of test generation
+    // 1. Load selected subgraph of WTG from JSON file
+    String fileDir = "/Users/cce13/dev/modeling-synthesis/WTGDebugger";
+    List<WTGNode> selectedNodes = new ArrayList<WTGNode>();
+
+    try {
+      String SEP = File.separator;
+      FileReader reader = new FileReader(fileDir + SEP + "selected.json");
+
+      String line;
+
+      JSONParser jsonParser = new JSONParser();
+      JSONObject jsonObj = (JSONObject) jsonParser.parse(reader);
+
+      JSONArray nodes = (JSONArray) jsonObj.get("nodes");
+
+      for (int i=0; i<nodes.size(); i++) {
+        JSONObject jsonNode = (JSONObject) nodes.get(i);
+        String type = (String) jsonNode.get("type");
+        String classname = (String) jsonNode.get("classname");
+        String pkg = "presto.android.gui.graph.";
+
+        if (type.equals(pkg + "NActivityNode")) {
+          SootClass fakeClass = new SootClass(classname);
+          NActivityNode newNode = new NActivityNode();
+          newNode.c = fakeClass;
+          selectedNodes.add(new WTGNode(newNode));
+        }
+        else if (type.equals(pkg + "NOptionsMenuNode")) {
+          SootClass fakeClass = new SootClass(classname);
+          NOptionsMenuNode newNode = new NOptionsMenuNode();
+          newNode.ownerActivity = fakeClass;
+          selectedNodes.add(new WTGNode(newNode));
+        }
+        else if (type.equals(pkg + "NContextMenuNode")) {
+          SootClass fakeClass = new SootClass(classname);
+          NContextMenuNode newNode = new NContextMenuNode();
+          selectedNodes.add(new WTGNode(newNode));
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
     VarUtil.v().guiOutput = output;
     WTGBuilder wtgBuilder = new WTGBuilder();
-    wtgBuilder.build(output);
+    wtgBuilder.build(output, selectedNodes);
     WTGAnalysisOutput wtgAO = new WTGAnalysisOutput(output, wtgBuilder);
     WTG wtg = wtgAO.getWTG();
     System.out.println("* calculate window transition graph.");
@@ -71,13 +123,6 @@ public class HTMLDemoClient implements GUIAnalysisClient {
       System.out.print("          type:   ");
       System.out.println(node.getWindow().getClass().getName());
     }
-
-    Velocity.init();
-    VelocityContext context = new VelocityContext();
-
-    Gson gson = new Gson();
-    System.out.println(gson.toJson(context));
-    System.out.println("context printed");
   }
 
   public String drawGraph(WTG wtg) {

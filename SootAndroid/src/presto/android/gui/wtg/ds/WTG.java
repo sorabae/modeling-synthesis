@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -77,6 +78,48 @@ public class WTG {
     return launcher;
   }
 
+  public void excludeNodes(List<WTGNode> selectedNodes) {
+    ArrayList<WTGNode> included = new ArrayList<WTGNode>();
+    ArrayList<WTGNode> excluded = new ArrayList<WTGNode>();
+
+    for (WTGNode node : this.getNodes()) {
+      String name = node.getWindow().toString();
+      String [] temp1 = name.split("\\[");
+      String [] temp2 = temp1[1].split("\\]");
+
+      String nodeType = temp1[0];
+      String nodeWindow = temp2[0];
+
+      for (WTGNode selected : selectedNodes) {
+        String name2 = selected.getWindow().toString();
+        String [] temp12 = name2.split("\\[");
+        String [] temp22 = temp12[1].split("\\]");
+
+        String selectedType = temp12[0];
+        String selectedWindow = temp22[0];
+
+        if ((nodeType.equals(selectedType) && nodeType.equals("ContextMenu")) || (nodeType.equals(selectedType) && nodeWindow.equals(selectedWindow))) {
+          included.add(node);
+        }
+      }
+    }
+
+    for (WTGNode node : this.getNodes()) {
+      if (!included.contains(node) && node != launcher)
+        excluded.add(node);
+    }
+    
+    for (WTGNode node : excluded) {
+      allNodes.values().remove(node);
+    }
+
+    System.out.println(this.allNodes);
+  }
+
+  private void removeNode(WTGNode target) {
+    allNodes.values().remove(target);
+  }
+
   public WTGNode getLauncherNode() {
     return launcher;
   }
@@ -129,7 +172,8 @@ public class WTG {
   public WTGNode getNode(NObjectNode window) {
     WTGNode wtgNode = allNodes.get(window);
     if (wtgNode == null) {
-      Logger.err(getClass().getSimpleName(), "wtg node doesn't exist: " + window);
+      return null;
+      // Logger.err(getClass().getSimpleName(), "wtg node doesn't exist: " + window);
     }
     return wtgNode;
   }

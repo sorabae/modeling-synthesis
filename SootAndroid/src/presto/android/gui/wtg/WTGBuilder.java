@@ -48,8 +48,17 @@ public class WTGBuilder {
   private WTG wtg;
   // output of each stage
   private List<Multimap<WTGEdgeSig, WTGEdge>> stageOutput;
+
+  private List<WTGNode> selectedNodes;
   
   public void build(GUIAnalysisOutput output) {
+    preBuild(output);
+    building();
+    postBuild();
+  }
+
+  public void build(GUIAnalysisOutput output, List<WTGNode> nodes) {
+    selectedNodes = nodes;
     preBuild(output);
     building();
     postBuild();
@@ -68,6 +77,7 @@ public class WTGBuilder {
     Multimap<WTGNode, NActivityNode> ownership = HashMultimap.create();
     Multimap<WTGEdgeSig, WTGEdge> stage1 = new ExplicitForwardEdgeBuilder(guiOutput, flowgraphRebuilder)
       .buildEdges(wtg);
+    wtg.excludeNodes(selectedNodes);
     Logger.verb(getClass().getSimpleName(), "stage 1 finishes");
     Multimap<WTGEdgeSig, WTGEdge> stage2 = new LifecycleForwardEdgeBuilder(guiOutput, flowgraphRebuilder)
       .buildEdges(wtg, stage1, ownership);
